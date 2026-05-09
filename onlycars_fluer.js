@@ -1,5 +1,18 @@
 const flyerCard = document.getElementById("flyer-card");
 const particlesContainer = document.getElementById("particles");
+const nav = document.querySelector("nav");
+
+function handleNavScrollState() {
+	if (!nav) {
+		return;
+	}
+
+	if (window.scrollY > 60) {
+		nav.classList.add("scrolled");
+	} else {
+		nav.classList.remove("scrolled");
+	}
+}
 
 function forceStartAtTop() {
 	if ("scrollRestoration" in history) {
@@ -113,9 +126,11 @@ function createParticles() {
 
 function initAnimations() {
 	forceStartAtTop();
+	handleNavScrollState();
 	runHeroIntroAnimation();
 	revealElementsOnScroll();
 	createParticles();
+	window.addEventListener("scroll", handleNavScrollState, { passive: true });
 
 	setTimeout(() => {
 		animateCounters();

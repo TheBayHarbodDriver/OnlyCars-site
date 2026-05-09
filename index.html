@@ -11,7 +11,7 @@
 	<link rel="apple-touch-icon" href="favicon.png" />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&display=swap" rel="stylesheet" />
 	<style>
 		:root {
 			--bg-a: #ff791f;
@@ -36,12 +36,9 @@
 
 		body {
 			min-height: 100vh;
-			font-family: "Sora", sans-serif;
+			font-family: "Plus Jakarta Sans", sans-serif;
 			color: var(--text);
-			background:
-				radial-gradient(circle at 18% 12%, rgba(255, 200, 151, 0.28), transparent 34%),
-				radial-gradient(circle at 83% 82%, rgba(255, 128, 45, 0.2), transparent 35%),
-				linear-gradient(130deg, var(--bg-a), var(--bg-b) 44%, var(--bg-c) 100%);
+			background: #0a0a0b;
 			overflow-x: hidden;
 		}
 
@@ -49,7 +46,7 @@
 			position: fixed;
 			inset: 0;
 			pointer-events: none;
-			opacity: 0.22;
+			opacity: 0.08;
 			background-image: radial-gradient(rgba(255, 255, 255, 0.12) 0.9px, transparent 0.9px);
 			background-size: 4px 4px;
 		}
@@ -59,26 +56,15 @@
 			max-width: 1200px;
 			margin: 0 auto;
 			padding: clamp(18px, 2.6vw, 34px);
-			padding-top: clamp(18px, 2.6vw, 34px);
+			padding-top: clamp(88px, 8.2vw, 106px);
 		}
 
 		.wave {
-			position: absolute;
-			left: -10%;
-			right: -10%;
-			top: 32%;
-			height: 220px;
-			background: linear-gradient(102deg, rgba(255, 222, 185, 0) 0%, rgba(255, 222, 185, 0.31) 48%, rgba(255, 222, 185, 0) 100%);
-			transform: rotate(-7deg);
-			pointer-events: none;
-			z-index: 1;
+			display: none;
 		}
 
 		.particles {
-			position: absolute;
-			inset: 0;
-			pointer-events: none;
-			z-index: 1;
+			display: none;
 		}
 
 		.particle {
@@ -91,36 +77,38 @@
 		}
 
 		nav {
-			position: static;
-			margin: 0 auto;
-			max-width: 1200px;
-			width: 100%;
-			z-index: 30;
+			position: fixed;
+			left: 0;
+			right: 0;
+			top: 0;
+			z-index: 100;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			padding: 11px 14px;
-			margin-bottom: clamp(12px, 2.2vw, 24px);
-			border-radius: 14px;
-			border: 1px solid rgba(255, 230, 210, 0.4);
-			background: linear-gradient(140deg, rgba(56, 18, 0, 0.8), rgba(34, 10, 0, 0.76));
-			box-shadow: 0 14px 24px rgba(28, 9, 0, 0.36);
-			backdrop-filter: blur(8px);
+			padding: 14px clamp(16px, 3vw, 34px);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+			background: #0a0a0b;
+			transition: background 180ms ease, backdrop-filter 180ms ease;
+		}
+
+		nav.scrolled {
+			background: rgba(8, 8, 9, 0.88);
+			backdrop-filter: blur(14px);
 		}
 
 		.brand {
 			display: flex;
 			align-items: center;
-			gap: 0;
+			gap: 9px;
 		}
 
 		.brand img {
 			width: 42px;
 			height: 42px;
-			padding: 6px;
+			padding: 4px;
 			border-radius: 10px;
-			background: rgba(255, 240, 226, 0.14);
-			border: 1px solid rgba(255, 235, 220, 0.34);
+			background: rgba(255, 107, 0, 0.14);
+			border: 1px solid rgba(255, 107, 0, 0.28);
 		}
 
 		.menu {
@@ -139,28 +127,55 @@
 
 		.privacy-btn {
 			text-decoration: none;
-			color: rgba(255, 241, 228, 0.96);
-			font-weight: 800;
-			font-size: 0.95rem;
-			padding: 0 8px 0 0;
+			color: #8f8a84;
+			font-weight: 500;
+			font-size: clamp(0.84rem, 1.2vw, 0.92rem);
+			padding: 0;
 			border: 0;
 			background: transparent;
 			box-shadow: none;
-			transition: opacity 180ms ease;
+			transition: color 180ms ease;
 		}
 
 		.privacy-btn:hover {
-			opacity: 0.78;
+			color: #f2efe8;
+		}
+
+		.nav-right {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.nav-download {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			height: 40px;
+			padding: 0 16px;
+			border-radius: 999px;
+			background: #ff6b00;
+			color: #ffffff;
+			font-size: clamp(0.78rem, 1vw, 0.88rem);
+			font-weight: 700;
+			letter-spacing: 0.01em;
+			text-decoration: none;
+			border: 1px solid rgba(255, 255, 255, 0.16);
 		}
 
 		.hero {
 			position: relative;
 			z-index: 2;
 			display: grid;
-			grid-template-columns: 1.02fr 0.98fr;
-			gap: clamp(18px, 2.2vw, 30px);
-			align-items: start;
-			padding: var(--space-section) 0 calc(var(--space-section) + 26px);
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: clamp(20px, 4vw, 56px);
+			align-items: center;
+			padding: clamp(24px, 4.2vw, 54px);
+			border-radius: 18px;
+			background:
+				radial-gradient(ellipse 60% 50% at 75% 30%, rgba(255, 107, 0, 0.13) 0%, transparent 70%),
+				#0a0a0b;
+			border: 1px solid rgba(255, 255, 255, 0.07);
 		}
 
 		.hero-copy {
@@ -168,19 +183,51 @@
 			z-index: 3;
 		}
 
+		.hero-pill {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 5px 14px;
+			border-radius: 99px;
+			font-size: 11px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.07em;
+			color: #ff6b00;
+			background: rgba(255, 107, 0, 0.1);
+			border: 1px solid rgba(255, 107, 0, 0.2);
+		}
+
+		.hero-pill-dot {
+			width: 7px;
+			height: 7px;
+			border-radius: 999px;
+			background: #ff6b00;
+			box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.35);
+			animation: pulse-dot 1700ms ease-out infinite;
+		}
+
 		h1 {
-			font-size: clamp(2.7rem, 6.6vw, 5rem);
-			line-height: 0.93;
-			letter-spacing: -0.03em;
-			max-width: 620px;
+			margin-top: 14px;
+			font-size: clamp(2rem, 3.8vw, 3.2rem);
+			line-height: 1.06;
+			letter-spacing: -0.04em;
+			font-weight: 800;
+			color: #f2efe8;
+			max-width: 13ch;
+		}
+
+		.h1-accent {
+			color: #ff6b00;
 		}
 
 		.description {
-			margin-top: 12px;
-			max-width: 560px;
-			font-size: clamp(1.05rem, 2vw, 1.28rem);
-			line-height: 1.48;
-			color: var(--muted);
+			margin-top: 1rem;
+			max-width: 420px;
+			font-size: clamp(0.94rem, 1.2vw, 0.95rem);
+			font-weight: 300;
+			line-height: 1.7;
+			color: #7a7873;
 		}
 
 		.intro-seq {
@@ -203,53 +250,118 @@
 
 		.actions {
 			display: flex;
-			gap: 12px;
+			gap: 10px;
 			flex-wrap: wrap;
-			margin-top: 20px;
+			margin-top: 2rem;
 		}
 
 		.store-badge {
 			display: inline-flex;
 			align-items: center;
-			justify-content: center;
-			min-width: 194px;
-			min-height: 84px;
-			padding: 14px 18px;
+			gap: 10px;
+			min-width: 0;
+			min-height: 0;
+			padding: 12px 20px;
 			text-decoration: none;
-			border-radius: 11px;
-			background: linear-gradient(180deg, #141414, #060606);
-			border: 1px solid rgba(255, 255, 255, 0.3);
-			box-shadow: 0 9px 18px rgba(0, 0, 0, 0.32);
+			border-radius: 12px;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			box-shadow: 0 10px 28px rgba(0, 0, 0, 0.26);
 			transition: transform 180ms ease, box-shadow 180ms ease;
 			transform-origin: center;
 		}
 
+		.store-badge.store-primary {
+			background: #ff6b00;
+			color: #ffffff;
+		}
+
+		.store-badge.store-secondary {
+			background: #1a1a1c;
+			color: #c8c5bf;
+			border-color: rgba(255, 255, 255, 0.1);
+		}
+
 		.store-badge:hover {
-			transform: scale(1.04);
-			box-shadow: 0 13px 24px rgba(0, 0, 0, 0.4);
+			transform: translateY(-1px);
+			box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
 		}
 
 		.store-badge:active {
-			transform: scale(1.01);
+			transform: translateY(0);
+		}
+
+		.store-icon {
+			width: 20px;
+			height: 20px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+		}
+
+		.store-icon svg {
+			width: 100%;
+			height: 100%;
+			fill: currentColor;
 		}
 
 		.store-label {
 			display: grid;
-			justify-items: center;
-			text-align: center;
+			justify-items: start;
+			text-align: left;
 			line-height: 1.03;
-			color: #fff;
+			color: currentColor;
 		}
 
 		.store-label small {
-			font-size: 0.63rem;
-			font-weight: 700;
-			opacity: 0.9;
+			font-size: 10px;
+			font-weight: 500;
+			opacity: 0.7;
 		}
 
 		.store-label strong {
-			font-size: 0.99rem;
-			font-weight: 800;
+			font-size: 14px;
+			font-weight: 700;
+		}
+
+		.trust-row {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			margin-top: 1.5rem;
+		}
+
+		.trust-avatars {
+			display: flex;
+			align-items: center;
+		}
+
+		.trust-avatar {
+			width: 28px;
+			height: 28px;
+			margin-left: -8px;
+			border-radius: 999px;
+			display: grid;
+			place-items: center;
+			font-size: 10px;
+			font-weight: 700;
+			color: #f3f0e9;
+			background: #151517;
+			border: 1px solid rgba(255, 107, 0, 0.45);
+		}
+
+		.trust-avatar:first-child {
+			margin-left: 0;
+		}
+
+		.trust-text {
+			font-size: 12px;
+			color: #6b6865;
+			font-weight: 500;
+		}
+
+		.trust-star {
+			color: #ff6b00;
 		}
 
 		.download-btn {
@@ -293,30 +405,83 @@
 		.hero-visual {
 			display: flex;
 			justify-content: center;
-			align-items: flex-start;
+			align-items: center;
 			position: relative;
-			min-height: 700px;
+			min-height: 620px;
+		}
+
+		.phone-stack {
+			position: relative;
+			width: min(460px, 100%);
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 
 		.phone-back,
 		.phone-front {
 			position: absolute;
-			width: min(310px, 68vw);
+			width: min(300px, 64vw);
 			padding: 9px;
 			border-radius: 34px;
 			background: linear-gradient(160deg, #1a1a1a, #070707);
 			border: 1px solid rgba(255, 255, 255, 0.22);
-			box-shadow: 0 30px 50px rgba(0, 0, 0, 0.46);
+			box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
 		}
 
 		.phone-back {
-			transform: rotate(-10deg) translateX(-80px) translateY(18px);
-			opacity: 0.92;
+			transform: rotate(-5deg) translateX(-20px);
+			opacity: 0.85;
 			filter: brightness(0.78);
+			z-index: 1;
 		}
 
 		.phone-front {
-			transform: rotate(8deg) translateX(62px) translateY(-8px);
+			transform: rotate(2deg);
+			z-index: 2;
+		}
+
+		.fuel-badge {
+			position: absolute;
+			left: 10px;
+			bottom: 14px;
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			padding: 8px 14px;
+			border-radius: 12px;
+			background: #1a1a1c;
+			border: 1px solid rgba(255, 107, 0, 0.2);
+			z-index: 3;
+		}
+
+		.fuel-badge svg {
+			width: 16px;
+			height: 16px;
+			stroke: #ff6b00;
+			stroke-width: 2;
+			fill: none;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			flex-shrink: 0;
+		}
+
+		.fuel-badge-text {
+			display: grid;
+			gap: 1px;
+		}
+
+		.fuel-badge-text strong {
+			font-size: 11px;
+			font-weight: 700;
+			color: #f2efe8;
+		}
+
+		.fuel-badge-text span {
+			font-size: 11px;
+			font-weight: 500;
+			color: #a09d97;
 		}
 
 		.intro-phone {
@@ -528,22 +693,34 @@
 			}
 		}
 
+		@keyframes pulse-dot {
+			0% {
+				box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.35);
+			}
+			70% {
+				box-shadow: 0 0 0 7px rgba(255, 107, 0, 0);
+			}
+			100% {
+				box-shadow: 0 0 0 0 rgba(255, 107, 0, 0);
+			}
+		}
+
 		@media (max-width: 1024px) {
 			.hero {
 				grid-template-columns: 1fr;
-				padding-bottom: calc(var(--space-section) + 12px);
+				padding: 24px 18px 28px;
 			}
 
 			.hero-visual {
-				min-height: 620px;
+				min-height: 520px;
 			}
 
 			.phone-back {
-				transform: rotate(-8deg) translateX(-50px) translateY(16px);
+				transform: rotate(-5deg) translateX(-20px);
 			}
 
 			.phone-front {
-				transform: rotate(7deg) translateX(44px) translateY(-6px);
+				transform: rotate(2deg);
 			}
 		}
 
@@ -555,18 +732,27 @@
 
 			.flyer {
 				padding: 16px;
-				padding-top: 16px;
+				padding-top: 78px;
 			}
 
 			nav {
 				justify-content: space-between;
 				width: 100%;
 				padding: 10px 12px;
-				margin-bottom: 14px;
 			}
 
-			.privacy-btn {
-				text-align: center;
+			.nav-right {
+				gap: 8px;
+			}
+
+			.nav-download {
+				height: 36px;
+				padding: 0 12px;
+				font-size: 0.76rem;
+			}
+
+			h1 {
+				font-size: clamp(1.8rem, 6vw, 2.4rem);
 			}
 
 			.actions {
@@ -574,30 +760,31 @@
 			}
 
 			.store-badge {
-				min-width: 0;
 				width: 100%;
+			}
+
+			.store-label {
+				justify-items: center;
+				text-align: center;
+			}
+
+			.hero-visual {
+				min-height: 440px;
+				margin-top: 14px;
+			}
+
+			.phone-back,
+			.phone-front {
+				width: min(246px, 72vw);
+			}
+
+			.fuel-badge {
+				display: none;
 			}
 
 			.download-btn {
 				width: 100%;
 				text-align: center;
-			}
-
-			.hero-visual {
-				min-height: 470px;
-			}
-
-			.phone-back,
-			.phone-front {
-				width: min(250px, 76vw);
-			}
-
-			.phone-back {
-				transform: rotate(-7deg) translateX(-34px) translateY(16px);
-			}
-
-			.phone-front {
-				transform: rotate(6deg) translateX(30px) translateY(-10px);
 			}
 
 			.why-list {
@@ -636,36 +823,71 @@
 			<a class="brand" href="#flyer-card" aria-label="OnlyCars Home">
 				<img src="favicon.png" alt="OnlyCars logo" />
 			</a>
-			<a class="privacy-btn" href="privacy-policy.html">Privacy Policy</a>
+			<div class="nav-right">
+				<a class="privacy-btn" href="privacy-policy.html">Privacy Policy</a>
+				<a class="nav-download" href="#flyer-card">Download App</a>
+			</div>
 		</nav>
 
 		<section class="hero">
 			<div class="hero-copy">
-				<h1 class="hero-title intro-seq">Manage your car easily and confidently</h1>
-				<p class="description hero-subtitle intro-seq">Track your car history, fuel costs, and plan your next services effortlessly.</p>
+				<div class="hero-pill intro-seq"><span class="hero-pill-dot" aria-hidden="true"></span>iOS &amp; Android - Available Now</div>
+				<h1 class="hero-title intro-seq">Your garage,<br />always under <span class="h1-accent">control</span></h1>
+				<p class="description hero-subtitle intro-seq">Track fuel costs, service history, and every car detail - all in one place. No spreadsheets. No forgotten deadlines.</p>
 				<div class="actions hero-actions intro-seq">
-					<a class="store-badge" href="#" aria-label="Get it on Google Play">
-						<span class="store-label">
-							<small>Get it on</small>
-							<strong>Google Play</strong>
+					<a class="store-badge store-primary" href="#" aria-label="Download on the App Store">
+						<span class="store-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+								<path d="M17.566 12.517c-.014-2.402 1.962-3.556 2.051-3.611-1.12-1.636-2.86-1.861-3.47-1.886-1.478-.149-2.887.867-3.638.867-.752 0-1.91-.845-3.14-.823-1.615.024-3.106.942-3.935 2.387-1.679 2.909-.427 7.217 1.206 9.576.798 1.153 1.751 2.447 3.001 2.401 1.205-.048 1.66-.779 3.118-.779 1.458 0 1.868.779 3.14.755 1.3-.022 2.121-1.176 2.913-2.334.917-1.34 1.294-2.639 1.309-2.706-.028-.012-2.51-.963-2.555-3.847zm-2.424-6.03c.663-.803 1.11-1.92.988-3.03-.956.038-2.113.637-2.798 1.439-.615.711-1.154 1.847-1.009 2.936 1.066.082 2.157-.543 2.819-1.345z"/>
+							</svg>
 						</span>
-					</a>
-					<a class="store-badge" href="#" aria-label="Download on the App Store">
 						<span class="store-label">
 							<small>Download on the</small>
 							<strong>App Store</strong>
 						</span>
 					</a>
+					<a class="store-badge store-secondary" href="#" aria-label="Get it on Google Play">
+						<span class="store-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+								<path d="M12.79 10.44 4.69 3.2A1.64 1.64 0 0 0 4 4.46v15.08c0 .5.25.95.69 1.26l8.1-7.24 2.68-2.12-2.68-2z"/>
+								<path d="m16.85 14.03-2.93-2.19 2.93-2.2 3.59 2.06c.75.43.75 1.52 0 1.95l-3.59 2.06z"/>
+							</svg>
+						</span>
+						<span class="store-label">
+							<small>Download on the</small>
+							<strong>Google Play</strong>
+						</span>
+					</a>
+				</div>
+				<div class="trust-row intro-seq">
+					<div class="trust-avatars" aria-hidden="true">
+						<span class="trust-avatar">KB</span>
+						<span class="trust-avatar">MN</span>
+						<span class="trust-avatar">SJ</span>
+					</div>
+					<p class="trust-text"><span class="trust-star">4.8★</span> Trusted by thousands of drivers</p>
 				</div>
 
 			</div>
 
 			<div class="hero-visual">
-				<div class="phone-back intro-phone" aria-hidden="true">
-					<img class="phone-shot" src="Simulator Screenshot - iPhone 16 Pro - 2026-04-09 at 23.40.47.png" alt="" />
-				</div>
-				<div class="phone-front intro-phone" aria-label="OnlyCars iPhone screenshot">
-					<img class="phone-shot" src="Simulator Screenshot - iPhone 16 Pro - 2026-04-06 at 19.55.47.png" alt="OnlyCars app screenshot on iPhone" />
+				<div class="phone-stack">
+					<div class="phone-back intro-phone" aria-hidden="true">
+						<img class="phone-shot" src="Simulator Screenshot - iPhone 16 Pro - 2026-04-09 at 23.40.47.png" alt="" />
+					</div>
+					<div class="phone-front intro-phone" aria-label="OnlyCars iPhone screenshot">
+						<img class="phone-shot" src="Simulator Screenshot - iPhone 16 Pro - 2026-04-06 at 19.55.47.png" alt="OnlyCars app screenshot on iPhone" />
+					</div>
+					<div class="fuel-badge" aria-label="Fuel tracked statistics">
+						<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+							<path d="M8 4h7v16H8z"/>
+							<path d="M15 8h2l2 2v7a2 2 0 0 1-2 2h-1"/>
+						</svg>
+						<div class="fuel-badge-text">
+							<strong>Fuel tracked</strong>
+							<span>22.0 L saved this month</span>
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>
