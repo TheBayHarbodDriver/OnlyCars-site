@@ -211,9 +211,10 @@
 		.store-badge {
 			display: inline-flex;
 			align-items: center;
-			gap: 10px;
+			justify-content: center;
 			min-width: 194px;
-			padding: 8px 12px;
+			min-height: 84px;
+			padding: 14px 18px;
 			text-decoration: none;
 			border-radius: 11px;
 			background: linear-gradient(180deg, #141414, #060606);
@@ -232,33 +233,10 @@
 			transform: scale(1.01);
 		}
 
-		.store-icon {
-			display: inline-flex;
-			width: 30px;
-			height: 30px;
-			align-items: center;
-			justify-content: center;
-			flex-shrink: 0;
-		}
-
-		.store-icon img {
-			display: block;
-			width: 100%;
-			height: 100%;
-			object-fit: contain;
-		}
-
-		.store-icon.play-icon {
-			width: 48px;
-			height: 48px;
-		}
-
-		.store-badge.play-badge {
-			gap: 5px;
-		}
-
 		.store-label {
 			display: grid;
+			justify-items: center;
+			text-align: center;
 			line-height: 1.03;
 			color: #fff;
 		}
@@ -666,21 +644,13 @@
 				<h1 class="hero-title intro-seq">Manage your car easily and confidently</h1>
 				<p class="description hero-subtitle intro-seq">Track your car history, fuel costs, and plan your next services effortlessly.</p>
 				<div class="actions hero-actions intro-seq">
-					<a class="store-badge play-badge" href="#" aria-label="Get it on Google Play">
-						<span class="store-icon play-icon" aria-hidden="true">
-							<img src="9ACF236D-F742-4948-B647-D5A97191CE97.png" alt="" />
-						</span>
+					<a class="store-badge" href="#" aria-label="Get it on Google Play">
 						<span class="store-label">
 							<small>Get it on</small>
 							<strong>Google Play</strong>
 						</span>
 					</a>
 					<a class="store-badge" href="#" aria-label="Download on the App Store">
-						<span class="store-icon" aria-hidden="true">
-							<svg viewBox="0 0 24 24" width="30" height="30" fill="#ffffff" focusable="false" aria-hidden="true">
-								<path d="M17.566 12.517c-.014-2.402 1.962-3.556 2.051-3.611-1.12-1.636-2.86-1.861-3.47-1.886-1.478-.149-2.887.867-3.638.867-.752 0-1.91-.845-3.14-.823-1.615.024-3.106.942-3.935 2.387-1.679 2.909-.427 7.217 1.206 9.576.798 1.153 1.751 2.447 3.001 2.401 1.205-.048 1.66-.779 3.118-.779 1.458 0 1.868.779 3.14.755 1.3-.022 2.121-1.176 2.913-2.334.917-1.34 1.294-2.639 1.309-2.706-.028-.012-2.51-.963-2.555-3.847zm-2.424-6.03c.663-.803 1.11-1.92.988-3.03-.956.038-2.113.637-2.798 1.439-.615.711-1.154 1.847-1.009 2.936 1.066.082 2.157-.543 2.819-1.345z"/>
-							</svg>
-						</span>
 						<span class="store-label">
 							<small>Download on the</small>
 							<strong>App Store</strong>
