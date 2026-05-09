@@ -11,14 +11,20 @@
 	<link rel="apple-touch-icon" href="favicon.png" />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&display=swap" rel="stylesheet" />
 	<style>
 		:root {
-			--bg-a: #ff791f;
-			--bg-b: #d44a00;
-			--bg-c: #2e0f08;
-			--text: #fff8f3;
-			--muted: rgba(255, 232, 214, 0.9);
+			--bg: #0a0a0b;
+			--surface: #111113;
+			--surface-2: #161618;
+			--text: #f2efe8;
+			--muted: #a09d97;
+			--muted-2: #7a7873;
+			--line: rgba(255, 255, 255, 0.07);
+			--line-strong: rgba(255, 255, 255, 0.12);
+			--accent: #ff6b00;
+			--accent-soft: rgba(255, 107, 0, 0.1);
+			--accent-line: rgba(255, 107, 0, 0.22);
 		}
 
 		* {
@@ -27,117 +33,210 @@
 			padding: 0;
 		}
 
+		html {
+			scroll-behavior: smooth;
+		}
+
 		body {
 			min-height: 100vh;
-			font-family: "Sora", sans-serif;
+			font-family: "Plus Jakarta Sans", sans-serif;
 			color: var(--text);
 			background:
-				radial-gradient(circle at 18% 12%, rgba(255, 200, 151, 0.28), transparent 34%),
-				radial-gradient(circle at 83% 82%, rgba(255, 128, 45, 0.2), transparent 35%),
-				linear-gradient(130deg, var(--bg-a), var(--bg-b) 44%, var(--bg-c) 100%);
+				radial-gradient(ellipse 56% 42% at 74% 12%, rgba(255, 107, 0, 0.14) 0%, transparent 72%),
+				var(--bg);
 		}
 
 		.page {
 			max-width: 980px;
 			margin: 0 auto;
-			padding: 24px 16px 44px;
+			padding: 94px 16px 48px;
 		}
 
 		nav {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			z-index: 100;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			padding: 11px 14px;
-			margin-bottom: 20px;
-			border-radius: 14px;
-			border: 1px solid rgba(255, 230, 210, 0.4);
-			background: linear-gradient(140deg, rgba(56, 18, 0, 0.8), rgba(34, 10, 0, 0.76));
-			box-shadow: 0 14px 24px rgba(28, 9, 0, 0.36);
+			padding: 12px clamp(16px, 3vw, 34px);
+			background: #0a0a0b;
+			border-bottom: 1px solid var(--line);
+			transition: background 180ms ease, backdrop-filter 180ms ease;
+		}
+
+		nav.scrolled {
+			background: rgba(8, 8, 9, 0.88);
+			backdrop-filter: blur(14px);
+		}
+
+		.brand {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			text-decoration: none;
+			color: var(--text);
+			font-weight: 700;
+			font-size: clamp(1rem, 1.6vw, 1.1rem);
 		}
 
 		.brand img {
-			width: 42px;
-			height: 42px;
+			width: 40px;
+			height: 40px;
+			padding: 4px;
 			border-radius: 10px;
+			background: var(--accent-soft);
+			border: 1px solid var(--accent-line);
 		}
 
-		nav a {
-			color: rgba(255, 241, 228, 0.96);
+		.nav-actions {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.nav-link {
+			color: var(--muted);
 			text-decoration: none;
+			font-size: clamp(0.83rem, 1vw, 0.92rem);
+			font-weight: 500;
+			transition: color 180ms ease;
+		}
+
+		.nav-link:hover {
+			color: var(--text);
+		}
+
+		.home-pill {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			height: 38px;
+			padding: 0 14px;
+			border-radius: 999px;
+			background: var(--accent);
+			color: #ffffff;
+			text-decoration: none;
+			font-size: 0.82rem;
 			font-weight: 700;
+			border: 1px solid rgba(255, 255, 255, 0.16);
 		}
 
 		.card {
-			padding: clamp(18px, 2.5vw, 28px);
-			border-radius: 16px;
-			background: rgba(51, 18, 8, 0.46);
-			border: 1px solid rgba(255, 220, 190, 0.2);
+			padding: clamp(20px, 3vw, 34px);
+			border-radius: 18px;
+			background: linear-gradient(165deg, rgba(17, 17, 19, 0.98), rgba(22, 22, 24, 0.96));
+			border: 1px solid var(--line);
+			box-shadow: 0 28px 60px rgba(0, 0, 0, 0.35);
 		}
 
 		.meta {
-			display: inline-block;
-			padding: 6px 10px;
+			display: inline-flex;
+			align-items: center;
+			padding: 6px 11px;
 			border-radius: 999px;
-			font-size: 0.73rem;
-			font-weight: 800;
+			font-size: 11px;
+			font-weight: 700;
 			letter-spacing: 0.07em;
 			text-transform: uppercase;
-			background: rgba(255, 255, 255, 0.12);
-			border: 1px solid rgba(255, 232, 209, 0.28);
+			color: var(--accent);
+			background: var(--accent-soft);
+			border: 1px solid var(--accent-line);
 		}
 
 		h1 {
-			margin-top: 10px;
-			font-size: clamp(1.6rem, 4vw, 2.1rem);
+			margin-top: 12px;
+			font-size: clamp(1.7rem, 3vw, 2.35rem);
+			letter-spacing: -0.03em;
+			line-height: 1.08;
 		}
 
 		.intro {
-			margin-top: 8px;
-			color: rgba(255, 235, 217, 0.92);
+			margin-top: 9px;
+			color: var(--muted);
+			font-size: clamp(0.93rem, 1.3vw, 1rem);
+			line-height: 1.7;
+			font-weight: 300;
+			max-width: 74ch;
 		}
 
 		.content {
-			margin-top: 14px;
+			margin-top: 16px;
 			display: grid;
 			gap: 8px;
 		}
 
 		h2 {
-			margin-top: 10px;
-			padding-top: 10px;
-			font-size: 1.03rem;
-			border-top: 1px solid rgba(255, 221, 193, 0.18);
+			margin-top: 11px;
+			padding-top: 12px;
+			font-size: clamp(1.02rem, 1.7vw, 1.12rem);
+			letter-spacing: -0.01em;
+			color: #f7f3ec;
+			border-top: 1px solid var(--line-strong);
 		}
 
 		p,
 		li {
-			font-size: 0.96rem;
-			line-height: 1.6;
-			color: rgba(255, 236, 218, 0.9);
+			font-size: clamp(0.9rem, 1.2vw, 0.97rem);
+			line-height: 1.68;
+			font-weight: 300;
+			color: #c9c4bd;
 		}
 
 		ul {
-			padding-left: 18px;
+			padding-left: 20px;
 			display: grid;
-			gap: 5px;
+			gap: 6px;
 		}
 
 		.contact {
-			font-weight: 800;
-			color: #fff;
+			font-weight: 700;
+			color: #ffb27b;
 			text-decoration: none;
+			border-bottom: 1px solid rgba(255, 107, 0, 0.36);
+		}
+
+		@media (max-width: 760px) {
+			.page {
+				padding-top: 82px;
+			}
+
+			.brand span {
+				display: none;
+			}
+
+			.nav-actions {
+				gap: 8px;
+			}
+
+			.home-pill {
+				height: 34px;
+				padding: 0 10px;
+				font-size: 0.75rem;
+			}
+
+			.card {
+				padding: 18px 16px;
+				border-radius: 14px;
+			}
 		}
 	</style>
 </head>
 <body>
-	<main class="page">
-		<nav>
-			<a class="brand" href="index.html" aria-label="Back to home">
-				<img src="favicon.png" alt="OnlyCars logo" />
-			</a>
-			<a href="index.html">Back to home</a>
-		</nav>
+	<nav id="top-nav">
+		<a class="brand" href="index.html" aria-label="Back to home">
+			<img src="favicon.png" alt="OnlyCars logo" />
+			<span>OnlyCars</span>
+		</a>
+		<div class="nav-actions">
+			<a class="nav-link" href="privacy-policy.html">Privacy Policy</a>
+			<a class="home-pill" href="index.html">Back to home</a>
+		</div>
+	</nav>
 
+	<main class="page">
 		<section class="card">
 			<span class="meta">Effective Date: April 12, 2026</span>
 			<h1>Privacy Policy - OnlyCars</h1>
@@ -220,5 +319,21 @@
 			</article>
 		</section>
 	</main>
+
+	<script>
+		const nav = document.getElementById("top-nav");
+
+		function handleScrollState() {
+			if (!nav) return;
+			if (window.scrollY > 60) {
+				nav.classList.add("scrolled");
+			} else {
+				nav.classList.remove("scrolled");
+			}
+		}
+
+		handleScrollState();
+		window.addEventListener("scroll", handleScrollState, { passive: true });
+	</script>
 </body>
 </html>
