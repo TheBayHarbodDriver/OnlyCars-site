@@ -1,1208 +1,824 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OnlyCars - Your garage under control</title>
-  <meta name="description" content="Track fuel, services and full vehicle history in one place with OnlyCars." />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='2' width='28' height='28' rx='8' fill='%23FF6B00'/%3E%3Cpath d='M7.5 18.5h17M10 18.5l1.8-4.6c.5-1.3 1.7-2.1 3.1-2.1h2.2c1.4 0 2.6.8 3.1 2.1L22 18.5M10.2 18.5l-.7 2.2M21.8 18.5l.7 2.2M12 21.2a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4Zm8 0a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4Z' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #0a0a0b;
-      --surface-1: #111113;
-      --surface-2: #161618;
-      --surface-3: #0e0e10;
-      --text: #f4f4f2;
-      --muted: #7a7873;
-      --muted-2: #6b6865;
-      --line: rgba(255, 255, 255, 0.07);
-      --line-strong: rgba(255, 255, 255, 0.1);
-      --accent: #ff6b00;
-      --accent-soft: rgba(255, 107, 0, 0.1);
-      --accent-line: rgba(255, 107, 0, 0.2);
-      --radius-sm: 10px;
-      --radius-md: 14px;
-      --radius-lg: 16px;
-      --space-section: clamp(56px, 8vw, 96px);
-      --space-inline: clamp(18px, 4vw, 40px);
-      --max: 1160px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: "Plus Jakarta Sans", sans-serif;
-      background: radial-gradient(circle at 70% 10%, rgba(255, 107, 0, 0.08), transparent 42%), var(--bg);
-      color: var(--text);
-      line-height: 1.4;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .container {
-      width: min(var(--max), 100% - (var(--space-inline) * 2));
-      margin: 0 auto;
-    }
-
-    .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      border-bottom: 1px solid var(--line);
-      transition: background 220ms ease, backdrop-filter 220ms ease;
-    }
-
-    .navbar.scrolled {
-      background: rgba(8, 8, 9, 0.85);
-      backdrop-filter: blur(12px);
-    }
-
-    .nav-inner {
-      min-height: 74px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      letter-spacing: -0.015em;
-      font-size: clamp(1.05rem, 1.6vw, 1.18rem);
-    }
-
-    .logo-mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 9px;
-      background: var(--accent);
-      display: grid;
-      place-items: center;
-    }
-
-    .logo-mark svg {
-      width: 20px;
-      height: 20px;
-      stroke: #fff;
-      fill: none;
-      stroke-width: 1.9;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .privacy-link {
-      color: var(--muted);
-      font-size: clamp(0.84rem, 1.2vw, 0.9rem);
-      font-weight: 500;
-      transition: color 180ms ease;
-    }
-
-    .privacy-link:hover {
-      color: var(--text);
-    }
-
-    .download-pill {
-      background: var(--accent);
-      color: #fff;
-      padding: 11px 16px;
-      border-radius: 999px;
-      font-weight: 700;
-      font-size: clamp(0.8rem, 1.2vw, 0.9rem);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: transform 180ms ease, filter 180ms ease;
-    }
-
-    .download-pill:hover {
-      transform: translateY(-1px);
-      filter: saturate(1.08);
-    }
-
-    main {
-      padding-top: 98px;
-    }
-
-    .hero {
-      padding-top: clamp(30px, 5vw, 56px);
-      padding-bottom: var(--space-section);
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 55fr 45fr;
-      gap: clamp(26px, 4vw, 52px);
-      align-items: center;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-
-    .d1 { animation-delay: 80ms; }
-    .d2 { animation-delay: 160ms; }
-    .d3 { animation-delay: 240ms; }
-    .d4 { animation-delay: 320ms; }
-    .d5 { animation-delay: 400ms; }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.11em;
-      color: var(--accent);
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    .pulse {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.42);
-      animation: pulseDot 1700ms ease-out infinite;
-    }
-
-    h1 {
-      font-size: clamp(2.2rem, 4vw, 3.6rem);
-      line-height: 1.05;
-      letter-spacing: -0.04em;
-      font-weight: 800;
-      max-width: 14ch;
-    }
-
-    .accent {
-      color: var(--accent);
-    }
-
-    .hero-sub {
-      margin-top: 16px;
-      max-width: 420px;
-      color: var(--muted);
-      font-weight: 300;
-      font-size: clamp(0.95rem, 1.4vw, 1rem);
-      line-height: 1.7;
-    }
-
-    .cta-row {
-      margin-top: 24px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .store-btn {
-      min-height: 64px;
-      border-radius: 999px;
-      padding: 10px 16px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      border: 1px solid var(--line-strong);
-      transition: transform 180ms ease, border-color 180ms ease;
-    }
-
-    .store-btn:hover {
-      transform: translateY(-1px);
-      border-color: rgba(255, 107, 0, 0.34);
-    }
-
-    .store-btn.primary {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .store-btn.secondary {
-      background: #1c1c1f;
-      color: #fff;
-    }
-
-    .store-logo {
-      width: 20px;
-      height: 20px;
-      flex-shrink: 0;
-      display: grid;
-      place-items: center;
-    }
-
-    .store-logo svg {
-      width: 100%;
-      height: 100%;
-      fill: currentColor;
-    }
-
-    .store-copy {
-      display: grid;
-      line-height: 1.05;
-    }
-
-    .store-copy small {
-      font-size: 0.62rem;
-      font-weight: 500;
-      opacity: 0.9;
-    }
-
-    .store-copy strong {
-      font-size: 0.93rem;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-    }
-
-    .social-proof {
-      margin-top: 22px;
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      color: #c8c3bd;
-      font-size: clamp(0.85rem, 1.2vw, 0.94rem);
-      font-weight: 500;
-    }
-
-    .avatars {
-      display: flex;
-      align-items: center;
-    }
-
-    .avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
-      border: 2px solid var(--bg);
-      margin-left: -7px;
-      display: grid;
-      place-items: center;
-      font-size: 0.62rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .avatar:first-child {
-      margin-left: 0;
-    }
-
-    .av-1 { background: #6a2a00; }
-    .av-2 { background: #8b3700; }
-    .av-3 { background: #a44600; }
-
-    .phone-wrap {
-      position: relative;
-      display: grid;
-      place-items: center;
-      padding: 10px;
-    }
-
-    .phone-wrap::before {
-      content: "";
-      position: absolute;
-      width: 75%;
-      height: 75%;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 107, 0, 0.08), transparent 65%);
-      filter: blur(20px);
-      z-index: 0;
-    }
-
-    .phone {
-      width: min(340px, 88vw);
-      border-radius: 18px;
-      padding: 8px;
-      background: linear-gradient(160deg, #1a1a1d, #0f0f11);
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      position: relative;
-      z-index: 1;
-    }
-
-    .screen {
-      border-radius: 14px;
-      background: linear-gradient(180deg, #151518, #101012);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      overflow: hidden;
-      min-height: 650px;
-      position: relative;
-      padding: 14px;
-      display: grid;
-      grid-template-rows: auto auto auto 1fr auto;
-      gap: 10px;
-    }
-
-    .dynamic-island {
-      position: absolute;
-      top: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 108px;
-      height: 25px;
-      border-radius: 999px;
-      background: #050506;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      z-index: 2;
-    }
-
-    .phone-ui-header {
-      margin-top: 26px;
-      border-radius: 14px;
-      background: linear-gradient(145deg, rgba(255, 107, 0, 0.25), rgba(255, 107, 0, 0.12));
-      border: 1px solid rgba(255, 107, 0, 0.34);
-      padding: 13px;
-    }
-
-    .car-line {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 10px;
-    }
-
-    .car-line span:first-child {
-      font-size: 1rem;
-    }
-
-    .car-line span:last-child {
-      color: #ffd9bf;
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
-
-    .stat-chips {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .chip {
-      background: rgba(8, 8, 9, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 10px;
-      padding: 8px;
-    }
-
-    .chip small {
-      display: block;
-      font-size: 0.62rem;
-      color: #f5d6c2;
-      font-weight: 300;
-    }
-
-    .chip strong {
-      font-size: 0.77rem;
-      display: block;
-      margin-top: 2px;
-      font-weight: 700;
-    }
-
-    .fuel-row {
-      padding: 10px;
-      border-radius: 12px;
-      background: var(--surface-2);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .fuel-row .top {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.76rem;
-      color: #c8c1ba;
-      margin-bottom: 7px;
-    }
-
-    .fuel-bar {
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
-      overflow: hidden;
-    }
-
-    .fuel-bar > div {
-      width: 68%;
-      height: 100%;
-      background: linear-gradient(90deg, #ff6b00, #ff8a33);
-      border-radius: inherit;
-    }
-
-    .service-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 2px;
-    }
-
-    .service-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      background: #17171a;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 9px 10px;
-    }
-
-    .service-row .name {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.76rem;
-      font-weight: 500;
-    }
-
-    .service-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--accent);
-    }
-
-    .service-date {
-      font-size: 0.7rem;
-      color: #8a857f;
-      font-weight: 300;
-    }
-
-    .screen-spacer {
-      min-height: 90px;
-    }
-
-    .tabbar {
-      border-radius: 12px;
-      background: #121215;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 8px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-    }
-
-    .tab {
-      border-radius: 10px;
-      height: 34px;
-      display: grid;
-      place-items: center;
-      color: #6f6b67;
-      border: 1px solid transparent;
-    }
-
-    .tab svg {
-      width: 17px;
-      height: 17px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .tab.active {
-      color: var(--accent);
-      background: rgba(255, 107, 0, 0.08);
-      border-color: rgba(255, 107, 0, 0.28);
-    }
-
-    .stats {
-      background: var(--surface-1);
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .stat-item {
-      text-align: center;
-      padding: 22px 10px;
-    }
-
-    .stat-item + .stat-item {
-      border-left: 1px solid var(--line);
-    }
-
-    .stat-item strong {
-      display: block;
-      font-size: clamp(1rem, 1.6vw, 1.08rem);
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.01em;
-    }
-
-    .stat-item span {
-      margin-top: 5px;
-      display: block;
-      color: var(--muted-2);
-      font-size: clamp(0.75rem, 1.2vw, 0.82rem);
-      font-weight: 300;
-    }
-
-    .features {
-      padding: var(--space-section) 0;
-    }
-
-    .section-eyebrow {
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.11em;
-      font-size: 11px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      font-size: clamp(1.65rem, 3vw, 2.45rem);
-      letter-spacing: -0.03em;
-      line-height: 1.08;
-      font-weight: 800;
-    }
-
-    .feature-board {
-      margin-top: 22px;
-      border-radius: var(--radius-lg);
-      background: var(--surface-3);
-      border: 1px solid var(--line);
-      overflow: hidden;
-    }
-
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1px;
-      background: #1a1a1d;
-    }
-
-    .feature-card {
-      background: var(--surface-3);
-      padding: 18px;
-      min-height: 182px;
-      display: grid;
-      align-content: start;
-      gap: 12px;
-    }
-
-    .feature-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      background: var(--accent-soft);
-      border: 1px solid var(--accent-line);
-      display: grid;
-      place-items: center;
-    }
-
-    .feature-icon svg {
-      width: 20px;
-      height: 20px;
-      stroke: var(--accent);
-      fill: none;
-      stroke-width: 1.9;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .feature-card h3 {
-      font-size: clamp(0.87rem, 1.2vw, 0.92rem);
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-
-    .feature-card p {
-      color: var(--muted-2);
-      font-size: clamp(0.74rem, 1.1vw, 0.79rem);
-      font-weight: 300;
-      line-height: 1.65;
-    }
-
-    .showcase {
-      padding-bottom: var(--space-section);
-    }
-
-    .shots-wrap {
-      margin-top: 18px;
-      overflow: hidden;
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
-      mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
-    }
-
-    .shots-track {
-      display: flex;
-      gap: 20px;
-      overflow-x: auto;
-      padding: 8px 6px 16px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 107, 0, 0.4) transparent;
-    }
-
-    .shots-track::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .shots-track::-webkit-scrollbar-thumb {
-      background: rgba(255, 107, 0, 0.4);
-      border-radius: 999px;
-    }
-
-    .shot {
-      min-width: min(285px, 72vw);
-      border-radius: 18px;
-      background: linear-gradient(160deg, #1a1a1d, #101013);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 8px;
-      flex-shrink: 0;
-    }
-
-    .shot:nth-child(1) { transform: rotate(-3deg); }
-    .shot:nth-child(2) { transform: rotate(0deg); }
-    .shot:nth-child(3) { transform: rotate(3deg); }
-
-    .shot-inner {
-      border-radius: 14px;
-      min-height: 430px;
-      background: #121215;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 16px;
-      display: grid;
-      align-content: start;
-      gap: 14px;
-    }
-
-    .shot h3 {
-      font-size: 1.05rem;
-      letter-spacing: -0.02em;
-      font-weight: 700;
-    }
-
-    .placeholder {
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      background: #17171a;
-      overflow: hidden;
-    }
-
-    .chart {
-      height: 170px;
-      background: linear-gradient(180deg, rgba(255, 107, 0, 0.34), rgba(255, 107, 0, 0.06));
-      position: relative;
-    }
-
-    .chart::after {
-      content: "";
-      position: absolute;
-      inset: auto 10px 10px 10px;
-      height: 2px;
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .rows {
-      display: grid;
-      gap: 8px;
-      padding: 10px;
-    }
-
-    .row {
-      height: 12px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .cards {
-      display: grid;
-      gap: 10px;
-      padding: 10px;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .mini-card {
-      min-height: 72px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 107, 0, 0.2);
-      background: rgba(255, 107, 0, 0.08);
-    }
-
-    .final-cta {
-      padding-bottom: var(--space-section);
-    }
-
-    .cta-panel {
-      border-radius: 18px;
-      border: 1px solid var(--line);
-      background: radial-gradient(circle at 50% 0%, rgba(255, 107, 0, 0.05), transparent 52%), var(--surface-1);
-      padding: clamp(28px, 5vw, 42px);
-      text-align: center;
-    }
-
-    .cta-panel p {
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: clamp(0.9rem, 1.2vw, 1rem);
-      font-weight: 300;
-    }
-
-    .cta-actions {
-      margin-top: 18px;
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    footer {
-      background: #080809;
-      border-top: 1px solid var(--line);
-    }
-
-    .footer-inner {
-      min-height: 78px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      color: #b8b3ad;
-      font-size: clamp(0.78rem, 1.15vw, 0.86rem);
-      font-weight: 500;
-    }
-
-    .footer-brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .footer-link {
-      color: #c8c3bd;
-      transition: color 180ms ease;
-    }
-
-    .footer-link:hover {
-      color: #fff;
-    }
-
-    @keyframes pulseDot {
-      0% {
-        box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.42);
-      }
-      70% {
-        box-shadow: 0 0 0 8px rgba(255, 107, 0, 0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(255, 107, 0, 0);
-      }
-    }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @media (max-width: 980px) {
-      .hero-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .phone-wrap {
-        order: 2;
-      }
-
-      .hero-copy {
-        order: 1;
-      }
-
-      .stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .stat-item:nth-child(3),
-      .stat-item:nth-child(4) {
-        border-top: 1px solid var(--line);
-      }
-
-      .stat-item:nth-child(3) {
-        border-left: 0;
-      }
-
-      .feature-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 767px) {
-      .nav-inner {
-        min-height: 68px;
-      }
-
-      .privacy-link {
-        display: none;
-      }
-
-      main {
-        padding-top: 88px;
-      }
-
-      .cta-row,
-      .cta-actions {
-        flex-direction: column;
-      }
-
-      .store-btn {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .store-copy {
-        justify-items: center;
-        text-align: center;
-      }
-
-      .social-proof {
-        flex-wrap: wrap;
-      }
-
-      .phone {
-        width: min(320px, 92vw);
-      }
-
-      .screen {
-        min-height: 600px;
-      }
-
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .stat-item + .stat-item {
-        border-left: 0;
-        border-top: 1px solid var(--line);
-      }
-
-      .feature-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .feature-card {
-        min-height: 0;
-      }
-
-      .footer-inner {
-        min-height: 92px;
-        flex-direction: column;
-        justify-content: center;
-      }
-    }
-  </style>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>OnlyCars - Manage Your Car Easily</title>
+	<meta name="description" content="Track fuel, services, and your full car history in one polished app." />
+	<link rel="icon" type="image/png" href="favicon.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
+	<link rel="apple-touch-icon" href="favicon.png" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet" />
+	<style>
+		:root {
+			--bg-a: #ff791f;
+			--bg-b: #d44a00;
+			--bg-c: #2e0f08;
+			--text: #fff8f3;
+			--muted: rgba(255, 232, 214, 0.9);
+			--line: rgba(255, 214, 181, 0.26);
+			--space-section: clamp(28px, 4.2vw, 48px);
+			--space-section-lg: clamp(38px, 6vw, 72px);
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		html {
+			scroll-behavior: smooth;
+		}
+
+		body {
+			min-height: 100vh;
+			font-family: "Sora", sans-serif;
+			color: var(--text);
+			background:
+				radial-gradient(circle at 18% 12%, rgba(255, 200, 151, 0.28), transparent 34%),
+				radial-gradient(circle at 83% 82%, rgba(255, 128, 45, 0.2), transparent 35%),
+				linear-gradient(130deg, var(--bg-a), var(--bg-b) 44%, var(--bg-c) 100%);
+			overflow-x: hidden;
+		}
+
+		.noise {
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+			opacity: 0.22;
+			background-image: radial-gradient(rgba(255, 255, 255, 0.12) 0.9px, transparent 0.9px);
+			background-size: 4px 4px;
+		}
+
+		.flyer {
+			position: relative;
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: clamp(18px, 2.6vw, 34px);
+			padding-top: clamp(18px, 2.6vw, 34px);
+		}
+
+		.wave {
+			position: absolute;
+			left: -10%;
+			right: -10%;
+			top: 32%;
+			height: 220px;
+			background: linear-gradient(102deg, rgba(255, 222, 185, 0) 0%, rgba(255, 222, 185, 0.31) 48%, rgba(255, 222, 185, 0) 100%);
+			transform: rotate(-7deg);
+			pointer-events: none;
+			z-index: 1;
+		}
+
+		.particles {
+			position: absolute;
+			inset: 0;
+			pointer-events: none;
+			z-index: 1;
+		}
+
+		.particle {
+			position: absolute;
+			width: 3px;
+			height: 3px;
+			border-radius: 999px;
+			background: rgba(255, 243, 230, 0.8);
+			animation: float-up linear infinite;
+		}
+
+		nav {
+			position: static;
+			margin: 0 auto;
+			max-width: 1200px;
+			width: 100%;
+			z-index: 30;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 11px 14px;
+			margin-bottom: clamp(12px, 2.2vw, 24px);
+			border-radius: 14px;
+			border: 1px solid rgba(255, 230, 210, 0.4);
+			background: linear-gradient(140deg, rgba(56, 18, 0, 0.8), rgba(34, 10, 0, 0.76));
+			box-shadow: 0 14px 24px rgba(28, 9, 0, 0.36);
+			backdrop-filter: blur(8px);
+		}
+
+		.brand {
+			display: flex;
+			align-items: center;
+			gap: 0;
+		}
+
+		.brand img {
+			width: 42px;
+			height: 42px;
+			padding: 6px;
+			border-radius: 10px;
+			background: rgba(255, 240, 226, 0.14);
+			border: 1px solid rgba(255, 235, 220, 0.34);
+		}
+
+		.menu {
+			list-style: none;
+			display: flex;
+			justify-content: center;
+			gap: clamp(16px, 3.6vw, 34px);
+		}
+
+		.menu a {
+			text-decoration: none;
+			color: rgba(255, 241, 228, 0.94);
+			font-weight: 700;
+			font-size: 1rem;
+		}
+
+		.privacy-btn {
+			text-decoration: none;
+			color: rgba(255, 241, 228, 0.96);
+			font-weight: 800;
+			font-size: 0.95rem;
+			padding: 0 8px 0 0;
+			border: 0;
+			background: transparent;
+			box-shadow: none;
+			transition: opacity 180ms ease;
+		}
+
+		.privacy-btn:hover {
+			opacity: 0.78;
+		}
+
+		.hero {
+			position: relative;
+			z-index: 2;
+			display: grid;
+			grid-template-columns: 1.02fr 0.98fr;
+			gap: clamp(18px, 2.2vw, 30px);
+			align-items: start;
+			padding: var(--space-section) 0 calc(var(--space-section) + 26px);
+		}
+
+		.hero-copy {
+			position: relative;
+			z-index: 3;
+		}
+
+		h1 {
+			font-size: clamp(2.7rem, 6.6vw, 5rem);
+			line-height: 0.93;
+			letter-spacing: -0.03em;
+			max-width: 620px;
+		}
+
+		.description {
+			margin-top: 12px;
+			max-width: 560px;
+			font-size: clamp(1.05rem, 2vw, 1.28rem);
+			line-height: 1.48;
+			color: var(--muted);
+		}
+
+		.intro-seq {
+			opacity: 0;
+			translate: 0 14px;
+			filter: blur(7px);
+			transition: opacity 620ms ease, translate 620ms cubic-bezier(0.22, 0.61, 0.36, 1), filter 620ms ease;
+			will-change: opacity, translate, filter;
+		}
+
+		.intro-seq.intro-in {
+			opacity: 1;
+			translate: 0 0;
+			filter: blur(0);
+		}
+
+		.hero-title.intro-seq {
+			translate: 0 10px;
+		}
+
+		.actions {
+			display: flex;
+			gap: 12px;
+			flex-wrap: wrap;
+			margin-top: 20px;
+		}
+
+		.store-badge {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-width: 194px;
+			min-height: 84px;
+			padding: 14px 18px;
+			text-decoration: none;
+			border-radius: 11px;
+			background: linear-gradient(180deg, #141414, #060606);
+			border: 1px solid rgba(255, 255, 255, 0.3);
+			box-shadow: 0 9px 18px rgba(0, 0, 0, 0.32);
+			transition: transform 180ms ease, box-shadow 180ms ease;
+			transform-origin: center;
+		}
+
+		.store-badge:hover {
+			transform: scale(1.04);
+			box-shadow: 0 13px 24px rgba(0, 0, 0, 0.4);
+		}
+
+		.store-badge:active {
+			transform: scale(1.01);
+		}
+
+		.store-label {
+			display: grid;
+			justify-items: center;
+			text-align: center;
+			line-height: 1.03;
+			color: #fff;
+		}
+
+		.store-label small {
+			font-size: 0.63rem;
+			font-weight: 700;
+			opacity: 0.9;
+		}
+
+		.store-label strong {
+			font-size: 0.99rem;
+			font-weight: 800;
+		}
+
+		.download-btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			margin-top: 16px;
+			padding: 13px 24px;
+			font-size: 1.25rem;
+			font-weight: 800;
+			letter-spacing: 0.01em;
+			text-decoration: none;
+			color: #2b0d00;
+			border-radius: 999px;
+			background: linear-gradient(145deg, #ffe7d3 0%, #ffc089 52%, #ff9f55 100%);
+			border: 1px solid rgba(255, 236, 216, 0.95);
+			box-shadow: 0 0 0 3px rgba(255, 171, 95, 0.32), 0 14px 26px rgba(60, 19, 0, 0.33);
+			transition: transform 220ms ease, box-shadow 220ms ease, filter 220ms ease;
+		}
+
+		.download-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 0 0 3px rgba(255, 171, 95, 0.45), 0 18px 30px rgba(60, 19, 0, 0.42);
+			filter: saturate(1.06);
+		}
+
+		.download-btn:active {
+			transform: translateY(0);
+		}
+
+		.download-btn svg {
+			width: 20px;
+			height: 20px;
+			stroke: currentColor;
+			stroke-width: 2.4;
+			fill: none;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+
+		.hero-visual {
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+			position: relative;
+			min-height: 700px;
+		}
+
+		.phone-back,
+		.phone-front {
+			position: absolute;
+			width: min(310px, 68vw);
+			padding: 9px;
+			border-radius: 34px;
+			background: linear-gradient(160deg, #1a1a1a, #070707);
+			border: 1px solid rgba(255, 255, 255, 0.22);
+			box-shadow: 0 30px 50px rgba(0, 0, 0, 0.46);
+		}
+
+		.phone-back {
+			transform: rotate(-10deg) translateX(-80px) translateY(18px);
+			opacity: 0.92;
+			filter: brightness(0.78);
+		}
+
+		.phone-front {
+			transform: rotate(8deg) translateX(62px) translateY(-8px);
+		}
+
+		.intro-phone {
+			opacity: 0;
+			scale: 0.86;
+			filter: blur(8px) saturate(0.9);
+			transition: opacity 760ms ease, scale 760ms cubic-bezier(0.17, 1.08, 0.36, 1), translate 760ms cubic-bezier(0.17, 1.08, 0.36, 1), filter 760ms ease;
+			will-change: opacity, scale, translate, filter;
+		}
+
+		.phone-back.intro-phone {
+			translate: -24px 42px;
+		}
+
+		.phone-front.intro-phone {
+			translate: 24px 52px;
+		}
+
+		.intro-phone.intro-in {
+			opacity: 1;
+			scale: 1;
+			translate: 0 0;
+			filter: blur(0) saturate(1);
+		}
+
+		.phone-shot {
+			display: block;
+			width: 100%;
+			height: auto;
+			border-radius: 26px;
+		}
+
+		.why {
+			position: relative;
+			z-index: 2;
+			padding-top: var(--space-section-lg);
+		}
+
+		.why h2 {
+			font-size: clamp(2.15rem, 4.8vw, 3.35rem);
+			line-height: 1.04;
+			margin-bottom: 18px;
+		}
+
+		.why-panel {
+			overflow: hidden;
+			border-radius: 24px;
+			background: linear-gradient(145deg, rgba(10, 12, 18, 0.92), rgba(7, 9, 14, 0.88));
+			border: 1px solid rgba(255, 177, 122, 0.24);
+			box-shadow: 0 22px 34px rgba(18, 8, 4, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+		}
+
+		.why-list {
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		.why-item {
+			display: grid;
+			gap: 18px;
+			align-content: start;
+			padding: 28px 26px;
+			min-height: 260px;
+			background: linear-gradient(160deg, rgba(7, 10, 17, 0.86), rgba(5, 7, 12, 0.92));
+			border-right: 1px solid rgba(255, 196, 149, 0.12);
+			border-bottom: 1px solid rgba(255, 196, 149, 0.12);
+		}
+
+		.why-icon {
+			width: 54px;
+			height: 54px;
+			border-radius: 14px;
+			display: grid;
+			place-items: center;
+			background: rgba(255, 115, 35, 0.2);
+			border: 1px solid rgba(255, 147, 72, 0.45);
+			box-shadow: inset 0 1px 0 rgba(255, 177, 132, 0.24);
+		}
+
+		.why-icon svg {
+			width: 24px;
+			height: 24px;
+			stroke: #ff963f;
+			stroke-width: 2;
+			fill: none;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+
+		.why-text h3 {
+			font-size: clamp(1.5rem, 2.35vw, 2.05rem);
+			line-height: 1.08;
+			letter-spacing: -0.02em;
+		}
+
+		.why-text p {
+			margin-top: 8px;
+			font-size: clamp(1rem, 1.32vw, 1.18rem);
+			line-height: 1.52;
+			color: rgba(255, 236, 218, 0.68);
+		}
+
+		.privacy-screen {
+			position: relative;
+			z-index: 2;
+			margin-top: var(--space-section);
+		}
+
+		.privacy-card {
+			padding: clamp(18px, 2.5vw, 28px);
+			border-radius: 16px;
+			background: rgba(51, 18, 8, 0.46);
+			border: 1px solid rgba(255, 220, 190, 0.2);
+		}
+
+		.privacy-hero {
+			padding-bottom: 10px;
+			border-bottom: 1px solid rgba(255, 219, 187, 0.2);
+		}
+
+		.privacy-meta {
+			display: inline-block;
+			padding: 6px 10px;
+			border-radius: 999px;
+			font-size: 0.73rem;
+			font-weight: 800;
+			letter-spacing: 0.07em;
+			text-transform: uppercase;
+			background: rgba(255, 255, 255, 0.12);
+			border: 1px solid rgba(255, 232, 209, 0.28);
+		}
+
+		.privacy-hero h3 {
+			margin-top: 10px;
+			font-size: clamp(1.45rem, 2.7vw, 2rem);
+		}
+
+		.privacy-hero p {
+			margin-top: 8px;
+			color: rgba(255, 235, 217, 0.92);
+		}
+
+		.policy-content {
+			margin-top: 12px;
+			display: grid;
+			gap: 8px;
+		}
+
+		.policy-content h4 {
+			margin-top: 8px;
+			padding-top: 8px;
+			font-size: 1.03rem;
+			border-top: 1px solid rgba(255, 221, 193, 0.18);
+		}
+
+		.policy-content p,
+		.policy-content li {
+			font-size: 0.95rem;
+			line-height: 1.58;
+			color: rgba(255, 236, 218, 0.88);
+		}
+
+		.policy-content ul {
+			padding-left: 18px;
+			display: grid;
+			gap: 5px;
+		}
+
+		.privacy-contact {
+			font-weight: 800;
+			color: #fff;
+			text-decoration: none;
+		}
+
+		.scroll-reveal {
+			opacity: 0;
+			transform: translate3d(0, 24px, 0);
+		}
+
+		.from-left {
+			transform: translate3d(-60px, 0, 0);
+		}
+
+		.from-right {
+			transform: translate3d(60px, 0, 0);
+		}
+
+		.from-up {
+			transform: translate3d(0, 24px, 0);
+		}
+
+		.revealed {
+			opacity: 1;
+			transform: translate3d(0, 0, 0);
+			transition: transform 720ms cubic-bezier(0.22, 0.61, 0.36, 1), opacity 720ms ease;
+		}
+
+		@keyframes float-up {
+			from {
+				transform: translateY(32px);
+				opacity: 0;
+			}
+			20% {
+				opacity: 0.75;
+			}
+			to {
+				transform: translateY(-260px);
+				opacity: 0;
+			}
+		}
+
+		@media (max-width: 1024px) {
+			.hero {
+				grid-template-columns: 1fr;
+				padding-bottom: calc(var(--space-section) + 12px);
+			}
+
+			.hero-visual {
+				min-height: 620px;
+			}
+
+			.phone-back {
+				transform: rotate(-8deg) translateX(-50px) translateY(16px);
+			}
+
+			.phone-front {
+				transform: rotate(7deg) translateX(44px) translateY(-6px);
+			}
+		}
+
+		@media (max-width: 760px) {
+			:root {
+				--space-section: 22px;
+				--space-section-lg: 34px;
+			}
+
+			.flyer {
+				padding: 16px;
+				padding-top: 16px;
+			}
+
+			nav {
+				justify-content: space-between;
+				width: 100%;
+				padding: 10px 12px;
+				margin-bottom: 14px;
+			}
+
+			.privacy-btn {
+				text-align: center;
+			}
+
+			.actions {
+				flex-direction: column;
+			}
+
+			.store-badge {
+				min-width: 0;
+				width: 100%;
+			}
+
+			.download-btn {
+				width: 100%;
+				text-align: center;
+			}
+
+			.hero-visual {
+				min-height: 470px;
+			}
+
+			.phone-back,
+			.phone-front {
+				width: min(250px, 76vw);
+			}
+
+			.phone-back {
+				transform: rotate(-7deg) translateX(-34px) translateY(16px);
+			}
+
+			.phone-front {
+				transform: rotate(6deg) translateX(30px) translateY(-10px);
+			}
+
+			.why-list {
+				grid-template-columns: 1fr;
+			}
+
+			.why-item {
+				min-height: 0;
+				padding: 20px 18px;
+				gap: 14px;
+			}
+
+			.why-panel {
+				border-radius: 18px;
+			}
+		}
+
+		@media (max-width: 1080px) {
+			.why-list {
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+
+			.why-item {
+				min-height: 220px;
+			}
+		}
+	</style>
 </head>
 <body>
-  <header class="navbar" id="navbar">
-    <div class="container nav-inner">
-      <a class="brand" href="#top" aria-label="OnlyCars home">
-        <span class="logo-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-            <path d="M3.5 14.5h17" />
-            <path d="M6 14.5l1.9-4.6A3.4 3.4 0 0 1 11 7.8h2a3.4 3.4 0 0 1 3.1 2.1L18 14.5" />
-            <circle cx="8" cy="17.3" r="1.3" />
-            <circle cx="16" cy="17.3" r="1.3" />
-          </svg>
-        </span>
-        <span>OnlyCars</span>
-      </a>
-      <div class="nav-actions">
-        <a class="privacy-link" href="privacy-policy.html">Privacy Policy</a>
-        <a class="download-pill" href="#download">Download App</a>
-      </div>
-    </div>
-  </header>
+	<div class="noise" aria-hidden="true"></div>
+	<main class="flyer" id="flyer-card">
+		<div class="wave" aria-hidden="true"></div>
+		<div class="particles" id="particles"></div>
 
-  <main id="top">
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow reveal d1"><span class="pulse" aria-hidden="true"></span>Available on iOS &amp; Android</p>
-          <h1 class="reveal d2">Your garage, always under <span class="accent">control</span></h1>
-          <p class="hero-sub reveal d3">Track fuel, services and your full vehicle history in one place. No spreadsheets. No forgotten deadlines.</p>
-          <div class="cta-row reveal d4" id="download">
-            <a class="store-btn primary" href="#" aria-label="Download on the App Store">
-              <span class="store-logo" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M16.52 12.66c-.03-2.34 1.91-3.46 1.99-3.51-1.09-1.59-2.78-1.81-3.38-1.84-1.44-.14-2.8.84-3.54.84-.73 0-1.86-.82-3.06-.8-1.57.03-3.02.92-3.83 2.33-1.64 2.84-.42 7.05 1.18 9.34.78 1.13 1.71 2.39 2.92 2.35 1.18-.05 1.62-.76 3.03-.76s1.82.76 3.06.74c1.27-.02 2.07-1.15 2.84-2.28.89-1.31 1.26-2.57 1.27-2.63-.03-.01-2.45-.94-2.48-3.78ZM14.16 6.78c.64-.78 1.08-1.87.95-2.94-.93.04-2.06.62-2.73 1.39-.6.69-1.13 1.8-.98 2.86 1.04.08 2.11-.53 2.76-1.31Z" />
-                </svg>
-              </span>
-              <span class="store-copy"><small>Download on the</small><strong>App Store</strong></span>
-            </a>
-            <a class="store-btn secondary" href="#" aria-label="Get it on Google Play">
-              <span class="store-logo" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M4.3 3.6 14.4 12 4.3 20.4A2 2 0 0 1 3 18.5v-13a2 2 0 0 1 1.3-1.9Z" />
-                  <path d="m14.4 12 4-3.3c1.1-.9 2.6-.2 2.6 1.2v4.2c0 1.4-1.5 2.1-2.6 1.2l-4-3.3Z" />
-                </svg>
-              </span>
-              <span class="store-copy"><small>Download on the</small><strong>Google Play</strong></span>
-            </a>
-          </div>
-          <div class="social-proof reveal d5">
-            <div class="avatars" aria-hidden="true">
-              <span class="avatar av-1">KB</span>
-              <span class="avatar av-2">MA</span>
-              <span class="avatar av-3">DJ</span>
-            </div>
-            <span>Trusted by thousands of drivers</span>
-          </div>
-        </div>
+		<nav>
+			<a class="brand" href="#flyer-card" aria-label="OnlyCars Home">
+				<img src="favicon.png" alt="OnlyCars logo" />
+			</a>
+			<a class="privacy-btn" href="privacy-policy.html">Privacy Policy</a>
+		</nav>
 
-        <div class="phone-wrap reveal d3" aria-hidden="true">
-          <div class="phone">
-            <div class="dynamic-island"></div>
-            <div class="screen">
-              <div class="phone-ui-header">
-                <div class="car-line"><span>Honda Civic</span><span>2021</span></div>
-                <div class="stat-chips">
-                  <div class="chip"><small>Mileage</small><strong>48,920 km</strong></div>
-                  <div class="chip"><small>Yearly cost</small><strong>$1,840</strong></div>
-                  <div class="chip"><small>Avg usage</small><strong>6.8 l/100</strong></div>
-                </div>
-              </div>
+		<section class="hero">
+			<div class="hero-copy">
+				<h1 class="hero-title intro-seq">Manage your car easily and confidently</h1>
+				<p class="description hero-subtitle intro-seq">Track your car history, fuel costs, and plan your next services effortlessly.</p>
+				<div class="actions hero-actions intro-seq">
+					<a class="store-badge" href="#" aria-label="Get it on Google Play">
+						<span class="store-label">
+							<small>Get it on</small>
+							<strong>Google Play</strong>
+						</span>
+					</a>
+					<a class="store-badge" href="#" aria-label="Download on the App Store">
+						<span class="store-label">
+							<small>Download on the</small>
+							<strong>App Store</strong>
+						</span>
+					</a>
+				</div>
 
-              <div class="fuel-row">
-                <div class="top"><span>Fuel this month</span><span>68%</span></div>
-                <div class="fuel-bar"><div></div></div>
-              </div>
+			</div>
 
-              <div class="service-list">
-                <div class="service-row">
-                  <span class="name"><span class="service-dot"></span>Oil change</span>
-                  <span class="service-date">in 420 km</span>
-                </div>
-                <div class="service-row">
-                  <span class="name"><span class="service-dot"></span>Annual inspection</span>
-                  <span class="service-date">12 Sep 2026</span>
-                </div>
-              </div>
+			<div class="hero-visual">
+				<div class="phone-back intro-phone" aria-hidden="true">
+					<img class="phone-shot" src="Simulator Screenshot - iPhone 16 Pro - 2026-04-09 at 23.40.47.png" alt="" />
+				</div>
+				<div class="phone-front intro-phone" aria-label="OnlyCars iPhone screenshot">
+					<img class="phone-shot" src="Simulator Screenshot - iPhone 16 Pro - 2026-04-06 at 19.55.47.png" alt="OnlyCars app screenshot on iPhone" />
+				</div>
+			</div>
+		</section>
 
-              <div class="screen-spacer"></div>
+		<section class="why scroll-reveal from-up" id="why-onlycars">
+			<h2>Everything in one place</h2>
+			<div class="why-panel">
+				<div class="why-list">
+					<article class="why-item">
+						<div class="why-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+								<path d="M7 3h6v18H7z"/>
+								<path d="M13 7h3l2 2v8a2 2 0 0 1-2 2h-1"/>
+								<path d="M9 8h2"/>
+							</svg>
+						</div>
+						<div class="why-text">
+							<h3>Fuel costs</h3>
+							<p>Log every refuel and monitor your monthly spending in clear reports.</p>
+						</div>
+					</article>
+					<article class="why-item">
+						<div class="why-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+								<path d="M6 6h4l8 8-3 3-8-8z"/>
+								<circle cx="8" cy="8" r="1.6"/>
+							</svg>
+						</div>
+						<div class="why-text">
+							<h3>Service history</h3>
+							<p>Keep all inspections, repairs, and part changes with date, price, and notes.</p>
+						</div>
+					</article>
+					<article class="why-item">
+						<div class="why-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+								<path d="M9 18h6"/>
+								<path d="M10 21h4"/>
+								<path d="M6 14a6 6 0 1 1 12 0c0 2-1 3.3-2.2 4.2H8.2C7 17.3 6 16 6 14z"/>
+							</svg>
+						</div>
+						<div class="why-text">
+							<h3>Reminders</h3>
+							<p>Get alerts for upcoming services and key dates before anything gets missed.</p>
+						</div>
+					</article>
+					<article class="why-item">
+						<div class="why-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+								<rect x="6" y="3" width="12" height="18" rx="2"/>
+								<circle cx="12" cy="8" r="2"/>
+								<path d="M9 14h6"/>
+							</svg>
+						</div>
+						<div class="why-text">
+							<h3>Vehicle profile</h3>
+							<p>Store VIN, insurance details, registration data, and photos in one record.</p>
+						</div>
+					</article>
+					<article class="why-item">
+						<div class="why-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+								<path d="M5 18h14"/>
+								<path d="M7 15l3-4 3 2 4-5"/>
+								<path d="M17 8h2v2"/>
+							</svg>
+						</div>
+						<div class="why-text">
+							<h3>Reports</h3>
+							<p>Visualize monthly and yearly costs plus service trends in quick summaries.</p>
+						</div>
+					</article>
+					<article class="why-item">
+						<div class="why-icon" aria-hidden="true">
+							<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+								<circle cx="6" cy="12" r="2"/>
+								<circle cx="18" cy="7" r="2"/>
+								<circle cx="18" cy="17" r="2"/>
+								<path d="M8 11l8-3"/>
+								<path d="M8 13l8 3"/>
+							</svg>
+						</div>
+						<div class="why-text">
+							<h3>Sharing</h3>
+							<p>Share vehicle history with a mechanic or family using a single secure link.</p>
+						</div>
+					</article>
+				</div>
+			</div>
+		</section>
 
-              <div class="tabbar">
-                <span class="tab active">
-                  <svg viewBox="0 0 24 24"><path d="M4 12 12 5l8 7" /><path d="M7 10v9h10v-9" /></svg>
-                </span>
-                <span class="tab">
-                  <svg viewBox="0 0 24 24"><path d="M6 19h12" /><path d="M7 16V8l3-3 4 4 3-2v9" /></svg>
-                </span>
-                <span class="tab">
-                  <svg viewBox="0 0 24 24"><path d="M7 7h10v10H7z" /><path d="M7 11h10" /></svg>
-                </span>
-                <span class="tab">
-                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.7l.1.1a2 2 0 0 1 0 2.8 2 2 0 0 1-2.8 0l-.1-.1a1.6 1.6 0 0 0-1.7-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.2a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.7.3l-.1.1a2 2 0 0 1-2.8 0 2 2 0 0 1 0-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.7 1.6 1.6 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.2a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.7l-.1-.1a2 2 0 0 1 0-2.8 2 2 0 0 1 2.8 0l.1.1a1.6 1.6 0 0 0 1.7.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.2a1.6 1.6 0 0 0 1 1.5h.1a1.6 1.6 0 0 0 1.7-.3l.1-.1a2 2 0 0 1 2.8 0 2 2 0 0 1 0 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.7v.1a1.6 1.6 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.2a1.6 1.6 0 0 0-1.5 1Z" /></svg>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="stats">
-      <div class="container stats-grid">
-        <div class="stat-item"><strong>Zero ads</strong><span>No tracking, ever</span></div>
-        <div class="stat-item"><strong>Free to use</strong><span>Core features always free</span></div>
-        <div class="stat-item"><strong>iOS &amp; Android</strong><span>Available now</span></div>
-        <div class="stat-item"><strong>Private by default</strong><span>Your data stays yours</span></div>
-      </div>
-    </section>
-
-    <section class="features">
-      <div class="container">
-        <p class="section-eyebrow">Core features</p>
-        <h2>Everything in one place</h2>
-
-        <div class="feature-board">
-          <div class="feature-grid">
-            <article class="feature-card">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M7 3h6v18H7z" /><path d="M13 8h3l2 2v7a2 2 0 0 1-2 2h-1" /><path d="M9 8h2" /></svg>
-              </div>
-              <h3>Fuel costs</h3>
-              <p>Track refuels, calculate average consumption, and review monthly charts with full clarity.</p>
-            </article>
-
-            <article class="feature-card">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M6 6h4l8 8-3 3-8-8z" /><circle cx="8" cy="8" r="1.6" /></svg>
-              </div>
-              <h3>Service history</h3>
-              <p>Every repair, inspection, and oil change is logged forever and ready when you need it.</p>
-            </article>
-
-            <article class="feature-card">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M12 7v5" /><path d="M12 16h.01" /><path d="M6 14a6 6 0 1 1 12 0c0 2-1 3.3-2.2 4.2H8.2C7 17.3 6 16 6 14z" /></svg>
-              </div>
-              <h3>Smart reminders</h3>
-              <p>Set alerts by kilometers or date, so deadlines never surprise you again.</p>
-            </article>
-
-            <article class="feature-card">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="18" rx="2" /><path d="M9 14h6" /><circle cx="12" cy="8" r="2" /></svg>
-              </div>
-              <h3>Vehicle profile</h3>
-              <p>Keep VIN, insurance, registration details, and photos together in one secure profile.</p>
-            </article>
-
-            <article class="feature-card">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M5 18h14" /><path d="M7 15l3-4 3 2 4-5" /><path d="M17 8h2v2" /></svg>
-              </div>
-              <h3>Cost analytics</h3>
-              <p>See monthly and yearly breakdowns with visual reports that make every expense obvious.</p>
-            </article>
-
-            <article class="feature-card">
-              <div class="feature-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><circle cx="6" cy="12" r="2" /><circle cx="18" cy="7" r="2" /><circle cx="18" cy="17" r="2" /><path d="M8 11l8-3" /><path d="M8 13l8 3" /></svg>
-              </div>
-              <h3>Garage sharing</h3>
-              <p>Share your vehicle history by link or QR code when a mechanic or family needs access.</p>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="showcase">
-      <div class="container">
-        <h2>See it in action</h2>
-        <div class="shots-wrap">
-          <div class="shots-track">
-            <article class="shot" aria-label="Fuel History screen">
-              <div class="shot-inner">
-                <h3>Fuel History</h3>
-                <div class="placeholder chart"></div>
-                <div class="placeholder rows">
-                  <div class="row"></div>
-                  <div class="row"></div>
-                  <div class="row"></div>
-                </div>
-              </div>
-            </article>
-
-            <article class="shot" aria-label="Vehicle Profile screen">
-              <div class="shot-inner">
-                <h3>Vehicle Profile</h3>
-                <div class="placeholder rows">
-                  <div class="row"></div>
-                  <div class="row"></div>
-                  <div class="row"></div>
-                  <div class="row"></div>
-                  <div class="row"></div>
-                </div>
-              </div>
-            </article>
-
-            <article class="shot" aria-label="Cost Overview screen">
-              <div class="shot-inner">
-                <h3>Cost Overview</h3>
-                <div class="placeholder cards">
-                  <div class="mini-card"></div>
-                  <div class="mini-card"></div>
-                  <div class="mini-card"></div>
-                  <div class="mini-card"></div>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="final-cta">
-      <div class="container">
-        <div class="cta-panel">
-          <h2>Ready to take control of your garage?</h2>
-          <p>Free download · No ads · No tracking</p>
-          <div class="cta-actions">
-            <a class="store-btn primary" href="#" aria-label="Download on the App Store">
-              <span class="store-logo" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M16.52 12.66c-.03-2.34 1.91-3.46 1.99-3.51-1.09-1.59-2.78-1.81-3.38-1.84-1.44-.14-2.8.84-3.54.84-.73 0-1.86-.82-3.06-.8-1.57.03-3.02.92-3.83 2.33-1.64 2.84-.42 7.05 1.18 9.34.78 1.13 1.71 2.39 2.92 2.35 1.18-.05 1.62-.76 3.03-.76s1.82.76 3.06.74c1.27-.02 2.07-1.15 2.84-2.28.89-1.31 1.26-2.57 1.27-2.63-.03-.01-2.45-.94-2.48-3.78ZM14.16 6.78c.64-.78 1.08-1.87.95-2.94-.93.04-2.06.62-2.73 1.39-.6.69-1.13 1.8-.98 2.86 1.04.08 2.11-.53 2.76-1.31Z" />
-                </svg>
-              </span>
-              <span class="store-copy"><small>Download on the</small><strong>App Store</strong></span>
-            </a>
-            <a class="store-btn secondary" href="#" aria-label="Get it on Google Play">
-              <span class="store-logo" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M4.3 3.6 14.4 12 4.3 20.4A2 2 0 0 1 3 18.5v-13a2 2 0 0 1 1.3-1.9Z" />
-                  <path d="m14.4 12 4-3.3c1.1-.9 2.6-.2 2.6 1.2v4.2c0 1.4-1.5 2.1-2.6 1.2l-4-3.3Z" />
-                </svg>
-              </span>
-              <span class="store-copy"><small>Download on the</small><strong>Google Play</strong></span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="logo-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-            <path d="M3.5 14.5h17" />
-            <path d="M6 14.5l1.9-4.6A3.4 3.4 0 0 1 11 7.8h2a3.4 3.4 0 0 1 3.1 2.1L18 14.5" />
-            <circle cx="8" cy="17.3" r="1.3" />
-            <circle cx="16" cy="17.3" r="1.3" />
-          </svg>
-        </span>
-        <span>&copy; 2026 OnlyCars</span>
-      </div>
-      <a class="footer-link" href="privacy-policy.html">Privacy Policy</a>
-    </div>
-  </footer>
-
-  <script>
-    (function () {
-      var nav = document.getElementById("navbar");
-
-      function onScroll() {
-        if (window.scrollY > 60) {
-          nav.classList.add("scrolled");
-        } else {
-          nav.classList.remove("scrolled");
-        }
-      }
-
-      onScroll();
-      window.addEventListener("scroll", onScroll, { passive: true });
-    })();
-  </script>
+		<section class="privacy-screen" id="privacy-policy">
+			<div class="privacy-card scroll-reveal from-up">
+				<div class="privacy-hero">
+					<span class="privacy-meta">Effective Date: April 12, 2026</span>
+					<h3>Privacy Policy - OnlyCars</h3>
+					<p>OnlyCars ("we", "us", "the app") respects your privacy and is committed to protecting your personal data.</p>
+				</div>
+				<article class="policy-content">
+					<h4>1. What Data We Collect</h4>
+					<p>We collect data you provide while using the app:</p>
+					<ul>
+						<li><strong>Account data:</strong> email address, username, profile photo (if added), and user ID (UID).</li>
+						<li><strong>Vehicle data:</strong> vehicle make, model, year, specification, and mileage.</li>
+						<li><strong>History and costs:</strong> fuel logs (fuel amount, price, mileage), services (costs, descriptions, dates), parts and other expenses, events/collisions.</li>
+						<li><strong>User content:</strong> photos uploaded by you (vehicles, documents, damages, etc.).</li>
+						<li><strong>Sharing data:</strong> data included in shared garages (if you use sharing features).</li>
+						<li><strong>Local device data:</strong> app settings (for example currency and preferences), notification state, achievements, and reminders.</li>
+					</ul>
+					<h4>2. How We Use Data</h4>
+					<p>Your data is used to:</p>
+					<ul>
+						<li>operate the application,</li>
+						<li>save and display vehicle information,</li>
+						<li>track costs and history,</li>
+						<li>enable garage sharing (link/QR),</li>
+						<li>improve app performance and quality.</li>
+					</ul>
+					<h4>3. Sign-In Methods</h4>
+					<p>You can sign in using Google Sign-In, Facebook Login, and Apple ID (for Apple devices). These services may provide basic data (for example email and name), used only for authentication.</p>
+					<h4>4. Data Storage</h4>
+					<p>Data is stored in secure third-party services:</p>
+					<ul>
+						<li>Firebase Authentication - user account data,</li>
+						<li>Cloud Firestore - app data,</li>
+						<li>Firebase Storage - photos and files.</li>
+					</ul>
+					<p>Data may be stored on servers outside your country.</p>
+					<h4>5. Data Sharing and Rights</h4>
+					<p>We do not sell your data. Data may be shared only with service providers (Google, Firebase, Meta, Apple) or when you share a garage yourself (link or QR). Anyone with the link can view that shared data.</p>
+					<h4>6. Data Retention Period</h4>
+					<p>We keep data as long as your account is active. You can delete your data at any time in the app.</p>
+					<h4>7. Account Deletion</h4>
+					<p>You can permanently delete your account and all data directly in the app. Deleting your account removes your profile, all garages, vehicle history, and all photos.</p>
+					<p>You can also request deletion by contacting us: <a class="privacy-contact" href="mailto:onlycarssupport@gmail.com">onlycarssupport@gmail.com</a></p>
+					<h4>8. Your Rights</h4>
+					<p>You have the right to access, correct, delete, restrict processing, object to processing, and data portability.</p>
+					<p>To exercise your rights, contact us: <a class="privacy-contact" href="mailto:onlycarssupport@gmail.com">onlycarssupport@gmail.com</a></p>
+					<h4>9. Security</h4>
+					<p>We apply appropriate technical and organizational measures to protect your data.</p>
+					<h4>10. Children</h4>
+					<p>The app is not intended for children below the legal minimum age in your jurisdiction.</p>
+					<h4>11. No Ads and No Tracking</h4>
+					<p>We do not use user data for advertising, profiling, or tracking.</p>
+					<h4>12. Policy Updates</h4>
+					<p>This Privacy Policy may be updated. The current version will always be available on this page.</p>
+					<h4>13. Contact</h4>
+					<p>If you have questions, contact us: <a class="privacy-contact" href="mailto:onlycarssupport@gmail.com">onlycarssupport@gmail.com</a></p>
+					<p>By using the OnlyCars app, you accept this Privacy Policy.</p>
+				</article>
+			</div>
+		</section>
+	</main>
+	<script src="onlycars_fluer.js"></script>
 </body>
 </html>
