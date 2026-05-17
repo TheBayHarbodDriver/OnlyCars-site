@@ -333,30 +333,6 @@
 		.store-label small { display: block; font-size: 10px; opacity: 0.7; font-weight: 500; line-height: 1.2; }
 		.store-label strong { display: block; font-size: 15px; font-weight: 700; line-height: 1.25; }
 
-		/* Trust row */
-		.trust-row {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-			margin-top: 28px;
-		}
-		.trust-avatars { display: flex; }
-		.avatar {
-			width: 30px; height: 30px;
-			border-radius: 50%;
-			border: 2px solid rgba(255,107,0,0.3);
-			background: #1c1c1f;
-			margin-left: -9px;
-			display: grid;
-			place-items: center;
-			font-size: 9px;
-			font-weight: 700;
-			color: var(--text);
-		}
-		.avatar:first-child { margin-left: 0; }
-		.trust-text { font-size: 12.5px; color: var(--text-3); font-weight: 500; }
-		.trust-text strong { color: var(--accent); }
-
 		/* ─── HERO VISUAL ─── */
 		.hero-visual {
 			position: relative;
@@ -468,51 +444,6 @@
 		@keyframes badge-b {
 			0%, 100% { transform: translateY(0); }
 			50% { transform: translateY(10px); }
-		}
-
-		/* ─── STATS STRIP ─── */
-		.stats-section {
-			position: relative;
-			z-index: 1;
-			border-top: 1px solid var(--border);
-			border-bottom: 1px solid var(--border);
-			background: rgba(255,255,255,0.012);
-			overflow: hidden;
-		}
-		.stats-section::before {
-			content: '';
-			position: absolute;
-			inset: 0;
-			background: radial-gradient(ellipse 60% 120% at 50% 50%, rgba(255,107,0,0.04), transparent);
-		}
-		.stats-inner {
-			position: relative;
-			display: flex;
-			justify-content: center;
-			gap: clamp(28px, 6vw, 90px);
-			padding: 36px 0;
-			flex-wrap: wrap;
-		}
-		.stat {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			gap: 5px;
-		}
-		.stat-val {
-			font-size: clamp(2rem, 3.5vw, 3rem);
-			font-weight: 800;
-			letter-spacing: -0.06em;
-			color: var(--text);
-			line-height: 1;
-		}
-		.stat-val em { color: var(--accent); font-style: normal; }
-		.stat-lbl {
-			font-size: 11px;
-			color: var(--text-3);
-			font-weight: 600;
-			text-transform: uppercase;
-			letter-spacing: 0.07em;
 		}
 
 		/* ─── SECTION COMMONS ─── */
@@ -874,8 +805,7 @@
 			.phone-front { width: 228px; }
 			.badge-fuel { left: -12px; }
 			.badge-service { right: -8px; }
-			.stats-inner { gap: 24px; }
-			.hero-actions { flex-direction: column; }
+				.hero-actions { flex-direction: column; }
 			.store-btn { width: 100%; }
 			.footer-row { flex-direction: column; text-align: center; }
 			.footer-links { justify-content: center; }
@@ -961,15 +891,6 @@
 					</span>
 				</a>
 			</div>
-			<div class="trust-row intro-el">
-				<div class="trust-avatars" aria-hidden="true">
-					<span class="avatar">KB</span>
-					<span class="avatar">MN</span>
-					<span class="avatar">SJ</span>
-					<span class="avatar">+</span>
-				</div>
-				<p class="trust-text"><strong>4.8★</strong> &nbsp;Trusted by thousands of drivers</p>
-			</div>
 		</div>
 
 		<div class="hero-visual" aria-hidden="true">
@@ -1009,30 +930,6 @@
 		</div>
 	</section>
 </div>
-
-<!-- STATS -->
-<section class="stats-section reveal">
-	<div class="wrap">
-		<div class="stats-inner">
-			<div class="stat">
-				<div class="stat-val"><span data-count="10">0</span>k<em>+</em></div>
-				<div class="stat-lbl">Active users</div>
-			</div>
-			<div class="stat">
-				<div class="stat-val">4.8<em>★</em></div>
-				<div class="stat-lbl">App rating</div>
-			</div>
-			<div class="stat">
-				<div class="stat-val">100<em>%</em></div>
-				<div class="stat-lbl">Free to use</div>
-			</div>
-			<div class="stat">
-				<div class="stat-val">0<em>×</em></div>
-				<div class="stat-lbl">Ads & tracking</div>
-			</div>
-		</div>
-	</div>
-</section>
 
 <!-- FEATURES -->
 <div class="wrap">
@@ -1157,7 +1054,7 @@
 				Start tracking<br>
 				your car <span class="text-gradient">today</span>
 			</h2>
-			<p class="cta-sub">Join thousands of drivers who stopped guessing and started knowing.</p>
+			<p class="cta-sub">Take full control of your car — one entry at a time.</p>
 			<div class="cta-actions">
 				<a class="store-btn store-ios" href="#" aria-label="Download on the App Store">
 					<span class="store-icon">

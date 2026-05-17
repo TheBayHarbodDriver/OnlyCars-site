@@ -3,337 +3,813 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Privacy Policy - OnlyCars</title>
-	<meta name="description" content="Privacy Policy for OnlyCars." />
+	<title>Privacy Policy — OnlyCars</title>
+	<meta name="description" content="Privacy Policy for OnlyCars app. We respect your data and never sell or track you." />
 	<link rel="icon" type="image/png" href="favicon.png" />
-	<link rel="icon" type="image/png" sizes="32x32" href="favicon.png" />
-	<link rel="icon" type="image/png" sizes="16x16" href="favicon.png" />
 	<link rel="apple-touch-icon" href="favicon.png" />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;0,800;1,300&display=swap" rel="stylesheet" />
 	<style>
+		/* ─── Variables ─── */
 		:root {
-			--bg: #0a0a0b;
-			--surface: #111113;
-			--surface-2: #161618;
+			--bg: #080808;
+			--surface: #0d0d0f;
+			--surface-2: #121214;
+			--border: rgba(255, 255, 255, 0.06);
+			--border-med: rgba(255, 255, 255, 0.1);
 			--text: #f2efe8;
-			--muted: #a09d97;
-			--muted-2: #7a7873;
-			--line: rgba(255, 255, 255, 0.07);
-			--line-strong: rgba(255, 255, 255, 0.12);
+			--text-2: #9a9690;
+			--text-3: #5c5a57;
 			--accent: #ff6b00;
-			--accent-soft: rgba(255, 107, 0, 0.1);
-			--accent-line: rgba(255, 107, 0, 0.22);
+			--accent-2: #ff9540;
+			--accent-soft: rgba(255, 107, 0, 0.08);
+			--accent-border: rgba(255, 107, 0, 0.2);
+			--radius: 20px;
 		}
 
-		* {
-			box-sizing: border-box;
-			margin: 0;
-			padding: 0;
-		}
-
-		html {
-			scroll-behavior: smooth;
-		}
-
+		*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+		html { scroll-behavior: smooth; }
+		img, svg { display: block; }
 		body {
-			min-height: 100vh;
 			font-family: "Plus Jakarta Sans", sans-serif;
+			background: var(--bg);
 			color: var(--text);
-			background:
-				radial-gradient(ellipse 56% 42% at 74% 12%, rgba(255, 107, 0, 0.14) 0%, transparent 72%),
-				var(--bg);
+			overflow-x: hidden;
+			min-height: 100vh;
+			-webkit-font-smoothing: antialiased;
+		}
+		a { color: inherit; }
+
+		/* ─── Background orbs ─── */
+		.bg-layer {
+			position: fixed; inset: 0;
+			pointer-events: none; z-index: 0; overflow: hidden;
+		}
+		.orb {
+			position: absolute;
+			border-radius: 50%;
+			filter: blur(100px);
+		}
+		.orb-1 {
+			width: 600px; height: 600px;
+			background: radial-gradient(circle, rgba(255,107,0,0.16) 0%, transparent 65%);
+			top: -160px; right: -80px;
+			animation: orb-drift 22s ease-in-out infinite;
+		}
+		.orb-2 {
+			width: 400px; height: 400px;
+			background: radial-gradient(circle, rgba(200,55,0,0.09) 0%, transparent 65%);
+			bottom: 20%; left: -60px;
+			animation: orb-drift 28s ease-in-out infinite reverse;
+		}
+		@keyframes orb-drift {
+			0%, 100% { transform: translate(0, 0); }
+			33% { transform: translate(-40px, 50px); }
+			66% { transform: translate(30px, -25px); }
+		}
+		.noise-layer {
+			position: fixed; inset: 0;
+			pointer-events: none; z-index: 0;
+			opacity: 0.03;
+			background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+			background-size: 256px 256px;
 		}
 
-		.page {
-			max-width: 980px;
-			margin: 0 auto;
-			padding: 94px 16px 48px;
-		}
-
+		/* ─── NAV ─── */
 		nav {
 			position: fixed;
-			top: 0;
-			left: 0;
-			right: 0;
-			z-index: 100;
+			top: 0; left: 0; right: 0; z-index: 200;
 			display: flex;
+			align-items: center;
 			justify-content: space-between;
-			align-items: center;
-			padding: 12px clamp(16px, 3vw, 34px);
-			background: #0a0a0b;
-			border-bottom: 1px solid var(--line);
-			transition: background 180ms ease, backdrop-filter 180ms ease;
+			padding: 13px clamp(16px, 3.2vw, 44px);
+			border-bottom: 1px solid transparent;
+			transition: background 300ms ease, border-color 300ms ease, backdrop-filter 300ms ease;
 		}
-
 		nav.scrolled {
-			background: rgba(8, 8, 9, 0.88);
-			backdrop-filter: blur(14px);
+			background: rgba(8,8,8,0.8);
+			backdrop-filter: blur(22px) saturate(1.5);
+			border-color: var(--border);
 		}
-
 		.brand {
-			display: inline-flex;
-			align-items: center;
-			gap: 10px;
+			display: flex; align-items: center; gap: 10px;
 			text-decoration: none;
-			color: var(--text);
-			font-weight: 700;
-			font-size: clamp(1rem, 1.6vw, 1.1rem);
 		}
-
-		.brand img {
-			width: 40px;
-			height: 40px;
-			padding: 4px;
+		.brand-logo {
+			width: 36px; height: 36px;
 			border-radius: 10px;
+			border: 1px solid var(--accent-border);
 			background: var(--accent-soft);
-			border: 1px solid var(--accent-line);
+			padding: 4px;
 		}
-
-		.nav-actions {
-			display: flex;
-			align-items: center;
-			gap: 12px;
+		.brand-name {
+			font-size: 0.98rem; font-weight: 800;
+			letter-spacing: -0.025em; color: var(--text);
 		}
-
+		.nav-right { display: flex; align-items: center; gap: 14px; }
 		.nav-link {
-			color: var(--muted);
-			text-decoration: none;
-			font-size: clamp(0.83rem, 1vw, 0.92rem);
-			font-weight: 500;
+			text-decoration: none; color: var(--text-3);
+			font-size: 0.875rem; font-weight: 500;
 			transition: color 180ms ease;
 		}
+		.nav-link:hover { color: var(--text-2); }
+		.nav-back {
+			display: inline-flex; align-items: center; gap: 7px;
+			height: 36px; padding: 0 16px;
+			border-radius: 999px;
+			background: var(--surface-2);
+			border: 1px solid var(--border-med);
+			color: var(--text-2);
+			text-decoration: none;
+			font-size: 0.845rem; font-weight: 600;
+			transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+		}
+		.nav-back:hover {
+			background: rgba(255,255,255,0.07);
+			color: var(--text); border-color: rgba(255,255,255,0.14);
+		}
+		.nav-back svg {
+			width: 14px; height: 14px;
+			stroke: currentColor; stroke-width: 2.2; fill: none;
+			stroke-linecap: round; stroke-linejoin: round;
+		}
 
-		.nav-link:hover {
+		/* ─── PAGE LAYOUT ─── */
+		.wrap {
+			position: relative; z-index: 1;
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 0 clamp(16px, 3vw, 40px);
+		}
+
+		/* ─── HERO HEADER ─── */
+		.page-hero {
+			padding-top: clamp(110px, 12vw, 150px);
+			padding-bottom: clamp(48px, 6vw, 72px);
+			text-align: center;
+		}
+		.date-chip {
+			display: inline-flex; align-items: center; gap: 7px;
+			padding: 5px 13px;
+			border-radius: 999px;
+			font-size: 11px; font-weight: 700;
+			text-transform: uppercase; letter-spacing: 0.07em;
+			color: var(--accent-2);
+			background: var(--accent-soft);
+			border: 1px solid var(--accent-border);
+			margin-bottom: 20px;
+		}
+		.date-chip-dot {
+			width: 5px; height: 5px;
+			border-radius: 50%; background: var(--accent);
+		}
+		.page-title {
+			font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+			font-weight: 800;
+			letter-spacing: -0.055em;
+			line-height: 1.0;
+			color: var(--text);
+		}
+		.title-sub {
+			display: block;
+			font-size: clamp(1.6rem, 3.5vw, 2.6rem);
+			font-weight: 300;
+			letter-spacing: -0.03em;
+			color: var(--text-2);
+			margin-top: 4px;
+		}
+		.page-lead {
+			margin-top: 20px;
+			font-size: clamp(0.97rem, 1.4vw, 1.05rem);
+			line-height: 1.78;
+			color: var(--text-2);
+			font-weight: 300;
+			max-width: 52ch;
+			margin-left: auto; margin-right: auto;
+		}
+
+		/* Separator line */
+		.sep {
+			height: 1px;
+			background: linear-gradient(90deg, transparent, var(--border-med) 20%, var(--border-med) 80%, transparent);
+			margin-bottom: clamp(40px, 6vw, 64px);
+		}
+
+		/* ─── POLICY SECTIONS ─── */
+		.sections { display: grid; gap: 12px; padding-bottom: clamp(60px, 8vw, 96px); }
+
+		.policy-card {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: var(--radius);
+			padding: clamp(22px, 3vw, 32px);
+			position: relative;
+			overflow: hidden;
+			transition: border-color 280ms ease, box-shadow 280ms ease;
+		}
+		.policy-card::before {
+			content: '';
+			position: absolute;
+			top: 0; right: 0;
+			width: 200px; height: 200px;
+			border-radius: 50%;
+			background: radial-gradient(circle, rgba(255,107,0,0.06), transparent 65%);
+			transform: translate(40%, -40%);
+			pointer-events: none;
+		}
+		.policy-card:hover {
+			border-color: rgba(255,107,0,0.18);
+			box-shadow: 0 16px 48px rgba(0,0,0,0.38);
+		}
+
+		/* Card with accent left border */
+		.policy-card-accent {
+			border-left: 2px solid rgba(255,107,0,0.4);
+		}
+
+		.card-head {
+			display: flex;
+			align-items: flex-start;
+			gap: 16px;
+			margin-bottom: 18px;
+		}
+		.card-icon {
+			width: 44px; height: 44px;
+			border-radius: 12px;
+			display: grid; place-items: center;
+			flex-shrink: 0;
+			background: rgba(255,107,0,0.1);
+			border: 1px solid rgba(255,107,0,0.18);
+		}
+		.card-icon svg {
+			width: 20px; height: 20px;
+			stroke: var(--accent-2); stroke-width: 2;
+			fill: none; stroke-linecap: round; stroke-linejoin: round;
+		}
+		.card-title-group { display: grid; gap: 3px; }
+		.card-num {
+			font-size: 10px; font-weight: 700;
+			text-transform: uppercase; letter-spacing: 0.08em;
+			color: var(--text-3);
+		}
+		.card-title {
+			font-size: clamp(1.05rem, 1.8vw, 1.22rem);
+			font-weight: 700;
+			letter-spacing: -0.02em;
 			color: var(--text);
 		}
 
-		.home-pill {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			height: 38px;
-			padding: 0 14px;
-			border-radius: 999px;
-			background: var(--accent);
-			color: #ffffff;
-			text-decoration: none;
-			font-size: 0.82rem;
-			font-weight: 700;
-			border: 1px solid rgba(255, 255, 255, 0.16);
-		}
-
-		.card {
-			padding: clamp(20px, 3vw, 34px);
-			border-radius: 18px;
-			background: linear-gradient(165deg, rgba(17, 17, 19, 0.98), rgba(22, 22, 24, 0.96));
-			border: 1px solid var(--line);
-			box-shadow: 0 28px 60px rgba(0, 0, 0, 0.35);
-		}
-
-		.meta {
-			display: inline-flex;
-			align-items: center;
-			padding: 6px 11px;
-			border-radius: 999px;
-			font-size: 11px;
-			font-weight: 700;
-			letter-spacing: 0.07em;
-			text-transform: uppercase;
-			color: var(--accent);
-			background: var(--accent-soft);
-			border: 1px solid var(--accent-line);
-		}
-
-		h1 {
-			margin-top: 12px;
-			font-size: clamp(1.7rem, 3vw, 2.35rem);
-			letter-spacing: -0.03em;
-			line-height: 1.08;
-		}
-
-		.intro {
-			margin-top: 9px;
-			color: var(--muted);
-			font-size: clamp(0.93rem, 1.3vw, 1rem);
-			line-height: 1.7;
+		.card-body { position: relative; z-index: 1; }
+		.card-body p {
+			font-size: clamp(0.9rem, 1.2vw, 0.97rem);
+			line-height: 1.72;
+			color: var(--text-2);
 			font-weight: 300;
-			max-width: 74ch;
 		}
+		.card-body p + p { margin-top: 10px; }
 
-		.content {
-			margin-top: 16px;
+		.bullet-list {
+			list-style: none;
+			padding: 0;
+			margin-top: 14px;
 			display: grid;
 			gap: 8px;
 		}
-
-		h2 {
-			margin-top: 11px;
-			padding-top: 12px;
-			font-size: clamp(1.02rem, 1.7vw, 1.12rem);
-			letter-spacing: -0.01em;
-			color: #f7f3ec;
-			border-top: 1px solid var(--line-strong);
-		}
-
-		p,
-		li {
+		.bullet-list li {
+			display: flex;
+			gap: 12px;
+			align-items: flex-start;
 			font-size: clamp(0.9rem, 1.2vw, 0.97rem);
-			line-height: 1.68;
+			line-height: 1.65;
+			color: var(--text-2);
 			font-weight: 300;
-			color: #c9c4bd;
+		}
+		.bullet-list li::before {
+			content: '';
+			width: 5px; height: 5px;
+			border-radius: 50%;
+			background: var(--accent);
+			flex-shrink: 0;
+			margin-top: 8px;
+			opacity: 0.7;
+		}
+		.bullet-list li strong { color: var(--text); font-weight: 600; }
+
+		/* Service provider tags */
+		.tag-row {
+			display: flex; flex-wrap: wrap; gap: 8px;
+			margin-top: 16px;
+		}
+		.tag {
+			display: inline-flex; align-items: center; gap: 6px;
+			padding: 5px 12px;
+			border-radius: 8px;
+			background: rgba(255,255,255,0.04);
+			border: 1px solid var(--border-med);
+			font-size: 12px; font-weight: 600;
+			color: var(--text-2);
+		}
+		.tag-dot {
+			width: 6px; height: 6px;
+			border-radius: 50%;
+			background: var(--accent);
+			opacity: 0.7;
 		}
 
-		ul {
-			padding-left: 20px;
-			display: grid;
-			gap: 6px;
+		/* Contact card special style */
+		.contact-card {
+			background: linear-gradient(140deg, rgba(255,107,0,0.1), rgba(12,12,14,0.6));
+			border-color: rgba(255,107,0,0.2);
 		}
-
-		.contact {
-			font-weight: 700;
-			color: #ffb27b;
+		.contact-email {
+			display: inline-flex; align-items: center; gap: 10px;
+			margin-top: 16px;
+			padding: 12px 18px;
+			border-radius: 12px;
+			background: rgba(255,107,0,0.08);
+			border: 1px solid rgba(255,107,0,0.18);
 			text-decoration: none;
-			border-bottom: 1px solid rgba(255, 107, 0, 0.36);
+			color: var(--accent-2);
+			font-size: 0.95rem; font-weight: 600;
+			letter-spacing: -0.01em;
+			transition: background 180ms ease, border-color 180ms ease;
+		}
+		.contact-email:hover {
+			background: rgba(255,107,0,0.14);
+			border-color: rgba(255,107,0,0.3);
+		}
+		.contact-email svg {
+			width: 16px; height: 16px;
+			stroke: currentColor; stroke-width: 2; fill: none;
+			stroke-linecap: round; stroke-linejoin: round;
+			flex-shrink: 0;
 		}
 
-		@media (max-width: 760px) {
-			.page {
-				padding-top: 82px;
-			}
+		/* Two-column grid for smaller cards */
+		.card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-			.brand span {
-				display: none;
-			}
+		/* ─── FOOTER ─── */
+		.page-footer {
+			position: relative; z-index: 1;
+			border-top: 1px solid var(--border);
+			padding: 26px 0;
+		}
+		.footer-row {
+			display: flex; justify-content: space-between;
+			align-items: center; gap: 16px;
+		}
+		.footer-brand {
+			display: flex; align-items: center; gap: 9px;
+			text-decoration: none;
+		}
+		.footer-brand img { width: 26px; height: 26px; border-radius: 7px; opacity: 0.65; }
+		.footer-brand span { font-size: 0.88rem; font-weight: 700; color: var(--text-3); letter-spacing: -0.02em; }
+		.footer-copy { font-size: 12px; color: var(--text-3); }
+		.footer-links { display: flex; gap: 18px; }
+		.footer-links a {
+			font-size: 12px; color: var(--text-3);
+			text-decoration: none; transition: color 160ms ease;
+		}
+		.footer-links a:hover { color: var(--text-2); }
 
-			.nav-actions {
-				gap: 8px;
-			}
+		/* ─── REVEAL ─── */
+		.reveal {
+			opacity: 0;
+			transform: translateY(24px);
+			transition: opacity 650ms cubic-bezier(0.22, 0.61, 0.36, 1), transform 650ms cubic-bezier(0.22, 0.61, 0.36, 1);
+		}
+		.reveal.in { opacity: 1; transform: translateY(0); }
 
-			.home-pill {
-				height: 34px;
-				padding: 0 10px;
-				font-size: 0.75rem;
-			}
+		/* Hero intro */
+		.intro-el {
+			opacity: 0; transform: translateY(16px); filter: blur(4px);
+			transition: opacity 560ms ease, transform 560ms cubic-bezier(0.22, 0.61, 0.36, 1), filter 560ms ease;
+		}
+		.intro-el.in { opacity: 1; transform: translateY(0); filter: blur(0); }
 
-			.card {
-				padding: 18px 16px;
-				border-radius: 14px;
-			}
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+			.reveal, .intro-el { opacity: 1; transform: none; filter: none; }
+		}
+
+		/* ─── RESPONSIVE ─── */
+		@media (max-width: 640px) {
+			.card-grid { grid-template-columns: 1fr; }
+			.footer-row { flex-direction: column; text-align: center; }
+			.footer-links { justify-content: center; }
+		}
+		@media (max-width: 480px) {
+			.nav-link { display: none; }
 		}
 	</style>
 </head>
 <body>
-	<nav id="top-nav">
-		<a class="brand" href="index.html" aria-label="Back to home">
-			<img src="favicon.png" alt="OnlyCars logo" />
-			<span>OnlyCars</span>
+
+<div class="bg-layer" aria-hidden="true">
+	<div class="orb orb-1"></div>
+	<div class="orb orb-2"></div>
+</div>
+<div class="noise-layer" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav id="nav">
+	<a class="brand" href="index.html" aria-label="OnlyCars Home">
+		<img class="brand-logo" src="favicon.png" alt="OnlyCars logo" />
+		<span class="brand-name">OnlyCars</span>
+	</a>
+	<div class="nav-right">
+		<a class="nav-link" href="privacy-policy.html">Privacy Policy</a>
+		<a class="nav-back" href="index.html">
+			<svg viewBox="0 0 24 24" aria-hidden="true">
+				<polyline points="15 18 9 12 15 6"/>
+			</svg>
+			Back to home
 		</a>
-		<div class="nav-actions">
-			<a class="nav-link" href="privacy-policy.html">Privacy Policy</a>
-			<a class="home-pill" href="index.html">Back to home</a>
+	</div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="wrap">
+	<header class="page-hero">
+		<div class="date-chip intro-el">
+			<span class="date-chip-dot" aria-hidden="true"></span>
+			Effective Date: April 12, 2026
 		</div>
-	</nav>
+		<h1 class="page-title intro-el">
+			Privacy Policy
+			<span class="title-sub">How we handle your data</span>
+		</h1>
+		<p class="page-lead intro-el">
+			OnlyCars respects your privacy. We collect only what's needed to run the app — no ads, no profiling, no selling your data. Ever.
+		</p>
+	</header>
 
-	<main class="page">
-		<section class="card">
-			<span class="meta">Effective Date: April 12, 2026</span>
-			<h1>Privacy Policy - OnlyCars</h1>
-			<p class="intro">OnlyCars ("we", "us", "the app") respects your privacy and is committed to protecting your personal data.</p>
-			<p class="intro">OnlyCars is not affiliated with Meta Platforms, Inc.</p>
+	<div class="sep"></div>
 
-			<article class="content">
-				<h2>1. What Data We Collect</h2>
-				<p>We collect data you provide while using the app:</p>
-				<ul>
+	<!-- POLICY SECTIONS -->
+	<div class="sections">
+
+		<!-- 1. What We Collect -->
+		<article class="policy-card policy-card-accent reveal">
+			<div class="card-head">
+				<div class="card-icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24">
+						<ellipse cx="12" cy="5" rx="9" ry="3"/>
+						<path d="M3 5v6c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>
+						<path d="M3 11v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6"/>
+					</svg>
+				</div>
+				<div class="card-title-group">
+					<span class="card-num">Section 1</span>
+					<h2 class="card-title">What Data We Collect</h2>
+				</div>
+			</div>
+			<div class="card-body">
+				<p>We collect only data you actively provide while using the app:</p>
+				<ul class="bullet-list">
 					<li><strong>Account data:</strong> email address, username, profile photo (if added), and user ID (UID).</li>
-					<li><strong>Vehicle data:</strong> vehicle make, model, year, specification, and mileage.</li>
-					<li><strong>History and costs:</strong> fuel logs (fuel amount, price, mileage), services (costs, descriptions, dates), parts and other expenses, events/collisions.</li>
-					<li><strong>User content:</strong> photos uploaded by you (vehicles, documents, damages, etc.).</li>
-					<li><strong>Sharing data:</strong> data included in shared garages (if you use sharing features).</li>
-					<li><strong>Local device data:</strong> app settings (for example currency and preferences), notification state, achievements, and reminders.</li>
+					<li><strong>Vehicle data:</strong> make, model, year, specification, and mileage.</li>
+					<li><strong>History and costs:</strong> fuel logs (amount, price, mileage), services (costs, descriptions, dates), parts, other expenses, and events/collisions.</li>
+					<li><strong>User content:</strong> photos you upload — vehicles, documents, damages, etc.</li>
+					<li><strong>Sharing data:</strong> data included in shared garages, if you use the sharing feature.</li>
+					<li><strong>Local device data:</strong> app settings (currency, preferences), notification state, achievements, and reminders.</li>
 				</ul>
+			</div>
+		</article>
 
-				<h2>2. How We Use Data</h2>
-				<p>Your data is used to:</p>
-				<ul>
-					<li>operate the application,</li>
-					<li>save and display vehicle information,</li>
-					<li>track costs and history,</li>
-					<li>enable garage sharing (link/QR),</li>
-					<li>improve app performance and quality.</li>
+		<!-- 2. How We Use Data -->
+		<article class="policy-card reveal">
+			<div class="card-head">
+				<div class="card-icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24">
+						<circle cx="12" cy="12" r="3"/>
+						<path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+						<path d="M4.93 4.93a10 10 0 0 0 0 14.14"/>
+					</svg>
+				</div>
+				<div class="card-title-group">
+					<span class="card-num">Section 2</span>
+					<h2 class="card-title">How We Use Your Data</h2>
+				</div>
+			</div>
+			<div class="card-body">
+				<p>Your data is used exclusively to operate and improve OnlyCars:</p>
+				<ul class="bullet-list">
+					<li>Run and display all app features</li>
+					<li>Save and show your vehicle information</li>
+					<li>Track fuel costs and service history</li>
+					<li>Enable garage sharing via link or QR code</li>
+					<li>Improve app performance and quality</li>
 				</ul>
+			</div>
+		</article>
 
-				<h2>3. Sign-In Methods</h2>
-				<p>You can sign in using Google Sign-In, Facebook Login, and Apple ID (for Apple devices). These services may provide basic data (for example email and name), used only for authentication.</p>
+		<!-- 3. Sign-In Methods + Facebook -->
+		<article class="policy-card reveal">
+			<div class="card-head">
+				<div class="card-icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24">
+						<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+						<circle cx="12" cy="7" r="4"/>
+					</svg>
+				</div>
+				<div class="card-title-group">
+					<span class="card-num">Section 3</span>
+					<h2 class="card-title">Sign-In Methods</h2>
+				</div>
+			</div>
+			<div class="card-body">
+				<p>You can sign in using <strong style="color:var(--text)">Google Sign-In</strong>, <strong style="color:var(--text)">Facebook Login</strong>, or <strong style="color:var(--text)">Apple ID</strong>. These services may provide basic profile data (name, email) used only for authentication.</p>
+				<p>When using Facebook Login, the app may receive your name, email, and profile picture. This data is used only to create or identify your account. The app does not post to Facebook, and does not access additional Facebook data without your explicit consent.</p>
+				<p style="margin-top:12px; font-size:11px; color:var(--text-3); font-style:italic;">OnlyCars is not affiliated with Meta Platforms, Inc.</p>
+			</div>
+		</article>
 
-				<h2>Facebook Login</h2>
-				<p>When you use Facebook Login, the app may receive basic profile information such as your name, email address, and profile picture.</p>
-				<p>This data is used only for authentication and account creation.</p>
-				<p>The app does not post to Facebook and does not access additional Facebook data without your explicit consent.</p>
-
-				<h2>4. Data Storage</h2>
-				<p>Data is stored in secure third-party services:</p>
-				<ul>
-					<li>Firebase Authentication - user account data,</li>
-					<li>Cloud Firestore - app data,</li>
-					<li>Firebase Storage - photos and files.</li>
-				</ul>
-				<p>Data may be stored on servers outside your country.</p>
-
-				<h2>5. Data Sharing and Rights</h2>
-				<p>We do not sell your data. Data may be shared only with service providers (Google, Firebase, Meta, Apple) or when you share a garage yourself (link or QR). Anyone with the link can view that shared data.</p>
-
-				<h2>6. Data Retention Period</h2>
-				<p>We keep data as long as your account is active. You can delete your data at any time in the app.</p>
-
-				<h2>7. Account Deletion</h2>
-				<p>You can permanently delete your account and all data directly in the app. Deleting your account removes your profile, all garages, vehicle history, and all photos.</p>
-				<p>You can also request deletion by contacting us: <a class="contact" href="mailto:onlycarssupport@gmail.com">onlycarssupport@gmail.com</a></p>
-
-				<h2>Data Deletion Instructions</h2>
-				<p>You can delete your account and all associated data directly inside the app.</p>
-				<p>You can also request data deletion by email at <a class="contact" href="mailto:onlycarssupport@gmail.com">onlycarssupport@gmail.com</a>.</p>
-				<p>Deletion requests are processed within 30 days.</p>
-
-				<h2>8. Your Rights</h2>
-				<p>You have the right to access, correct, delete, restrict processing, object to processing, and data portability.</p>
-				<p>To exercise your rights, contact us: <a class="contact" href="mailto:onlycarssupport@gmail.com">onlycarssupport@gmail.com</a></p>
-
-				<h2>9. Security</h2>
-				<p>We apply appropriate technical and organizational measures to protect your data.</p>
-
-				<h2>10. Children</h2>
-				<p>The app is not intended for children below the legal minimum age in your jurisdiction.</p>
-
-				<h2>11. No Ads and No Tracking</h2>
-				<p>We do not use user data for advertising, profiling, or tracking.</p>
-
-				<h2>12. Policy Updates</h2>
-				<p>This Privacy Policy may be updated. The current version will always be available on this page.</p>
-
-				<h2>13. Contact</h2>
-				<p>If you have questions, contact us: <a class="contact" href="mailto:onlycarssupport@gmail.com">onlycarssupport@gmail.com</a></p>
-				<p>By using the OnlyCars app, you accept this Privacy Policy.</p>
+		<!-- 4 & 5 — two column -->
+		<div class="card-grid">
+			<!-- 4. Data Storage -->
+			<article class="policy-card reveal">
+				<div class="card-head">
+					<div class="card-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24">
+							<rect x="2" y="3" width="20" height="14" rx="2"/>
+							<path d="M8 21h8"/>
+							<path d="M12 17v4"/>
+						</svg>
+					</div>
+					<div class="card-title-group">
+						<span class="card-num">Section 4</span>
+						<h2 class="card-title">Data Storage</h2>
+					</div>
+				</div>
+				<div class="card-body">
+					<p>Data is stored in secure third-party infrastructure. Servers may be located outside your country.</p>
+					<div class="tag-row">
+						<span class="tag"><span class="tag-dot"></span>Firebase Auth</span>
+						<span class="tag"><span class="tag-dot"></span>Cloud Firestore</span>
+						<span class="tag"><span class="tag-dot"></span>Firebase Storage</span>
+					</div>
+				</div>
 			</article>
-		</section>
-	</main>
 
-	<script>
-		const nav = document.getElementById("top-nav");
+			<!-- 5. Data Sharing -->
+			<article class="policy-card reveal">
+				<div class="card-head">
+					<div class="card-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24">
+							<circle cx="6" cy="12" r="2"/>
+							<circle cx="18" cy="7" r="2"/>
+							<circle cx="18" cy="17" r="2"/>
+							<path d="M8 11l8-3"/>
+							<path d="M8 13l8 3"/>
+						</svg>
+					</div>
+					<div class="card-title-group">
+						<span class="card-num">Section 5</span>
+						<h2 class="card-title">Data Sharing</h2>
+					</div>
+				</div>
+				<div class="card-body">
+					<p>We do not sell your data. It may be shared only with infrastructure providers (Google, Firebase, Meta, Apple) or when you explicitly share a garage. Anyone with your link can view that data.</p>
+				</div>
+			</article>
+		</div>
 
-		function handleScrollState() {
-			if (!nav) return;
-			if (window.scrollY > 60) {
-				nav.classList.add("scrolled");
-			} else {
-				nav.classList.remove("scrolled");
-			}
-		}
+		<!-- 6 & 7 — two column -->
+		<div class="card-grid">
+			<!-- 6. Data Retention -->
+			<article class="policy-card reveal">
+				<div class="card-head">
+					<div class="card-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24">
+							<circle cx="12" cy="12" r="9"/>
+							<path d="M12 7v5l3 3"/>
+						</svg>
+					</div>
+					<div class="card-title-group">
+						<span class="card-num">Section 6</span>
+						<h2 class="card-title">Data Retention</h2>
+					</div>
+				</div>
+				<div class="card-body">
+					<p>We keep your data as long as your account is active. You can delete your data at any time directly inside the app.</p>
+				</div>
+			</article>
 
-		handleScrollState();
-		window.addEventListener("scroll", handleScrollState, { passive: true });
-	</script>
+			<!-- 11. No Ads -->
+			<article class="policy-card reveal">
+				<div class="card-head">
+					<div class="card-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24">
+							<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+							<path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+							<line x1="1" y1="1" x2="23" y2="23"/>
+						</svg>
+					</div>
+					<div class="card-title-group">
+						<span class="card-num">Section 11</span>
+						<h2 class="card-title">No Ads, No Tracking</h2>
+					</div>
+				</div>
+				<div class="card-body">
+					<p>We do not use your data for advertising, profiling, or behavioral tracking of any kind.</p>
+				</div>
+			</article>
+		</div>
+
+		<!-- 7. Account Deletion -->
+		<article class="policy-card policy-card-accent reveal">
+			<div class="card-head">
+				<div class="card-icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24">
+						<path d="M3 6h18"/>
+						<path d="M8 6V4h8v2"/>
+						<path d="M19 6l-1 14H6L5 6"/>
+						<path d="M10 11v6"/>
+						<path d="M14 11v6"/>
+					</svg>
+				</div>
+				<div class="card-title-group">
+					<span class="card-num">Section 7</span>
+					<h2 class="card-title">Account Deletion</h2>
+				</div>
+			</div>
+			<div class="card-body">
+				<p>You can permanently delete your account and all associated data directly inside the app. This removes your profile, all garages, vehicle history, and all uploaded photos.</p>
+				<p>You can also request deletion by contacting us. Deletion requests are processed within 30 days.</p>
+			</div>
+		</article>
+
+		<!-- 8 & 9 — two column -->
+		<div class="card-grid">
+			<!-- 8. Your Rights -->
+			<article class="policy-card reveal">
+				<div class="card-head">
+					<div class="card-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24">
+							<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+						</svg>
+					</div>
+					<div class="card-title-group">
+						<span class="card-num">Section 8</span>
+						<h2 class="card-title">Your Rights</h2>
+					</div>
+				</div>
+				<div class="card-body">
+					<p>You have the right to access, correct, delete, restrict processing, object to processing, and request data portability. Contact us to exercise any of these rights.</p>
+				</div>
+			</article>
+
+			<!-- 9. Security -->
+			<article class="policy-card reveal">
+				<div class="card-head">
+					<div class="card-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24">
+							<rect x="3" y="11" width="18" height="11" rx="2"/>
+							<path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+						</svg>
+					</div>
+					<div class="card-title-group">
+						<span class="card-num">Section 9</span>
+						<h2 class="card-title">Security</h2>
+					</div>
+				</div>
+				<div class="card-body">
+					<p>We apply appropriate technical and organizational measures to protect your personal data against unauthorized access, loss, or disclosure.</p>
+				</div>
+			</article>
+		</div>
+
+		<!-- 10 & 12 — two column -->
+		<div class="card-grid">
+			<!-- 10. Children -->
+			<article class="policy-card reveal">
+				<div class="card-head">
+					<div class="card-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24">
+							<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+							<circle cx="9" cy="7" r="4"/>
+							<path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+							<path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+						</svg>
+					</div>
+					<div class="card-title-group">
+						<span class="card-num">Section 10</span>
+						<h2 class="card-title">Children</h2>
+					</div>
+				</div>
+				<div class="card-body">
+					<p>The app is not intended for children below the legal minimum age in your jurisdiction.</p>
+				</div>
+			</article>
+
+			<!-- 12. Policy Updates -->
+			<article class="policy-card reveal">
+				<div class="card-head">
+					<div class="card-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24">
+							<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+							<path d="M3 3v5h5"/>
+						</svg>
+					</div>
+					<div class="card-title-group">
+						<span class="card-num">Section 12</span>
+						<h2 class="card-title">Policy Updates</h2>
+					</div>
+				</div>
+				<div class="card-body">
+					<p>This Privacy Policy may be updated when needed. The current version will always be available at this URL.</p>
+				</div>
+			</article>
+		</div>
+
+		<!-- 13. Contact -->
+		<article class="policy-card contact-card reveal">
+			<div class="card-head">
+				<div class="card-icon" aria-hidden="true">
+					<svg viewBox="0 0 24 24">
+						<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+						<polyline points="22,6 12,13 2,6"/>
+					</svg>
+				</div>
+				<div class="card-title-group">
+					<span class="card-num">Section 13</span>
+					<h2 class="card-title">Contact Us</h2>
+				</div>
+			</div>
+			<div class="card-body">
+				<p>Questions about this policy, data deletion requests, or exercising your rights? Reach out directly.</p>
+				<a class="contact-email" href="mailto:onlycarssupport@gmail.com">
+					<svg viewBox="0 0 24 24" aria-hidden="true">
+						<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+						<polyline points="22,6 12,13 2,6"/>
+					</svg>
+					onlycarssupport@gmail.com
+				</a>
+				<p style="margin-top:16px; font-size:12.5px; color:var(--text-3);">By using OnlyCars you accept this Privacy Policy.</p>
+			</div>
+		</article>
+
+	</div>
+</div>
+
+<!-- FOOTER -->
+<div class="wrap">
+	<footer class="page-footer">
+		<div class="footer-row">
+			<a class="footer-brand" href="index.html" aria-label="OnlyCars">
+				<img src="favicon.png" alt="OnlyCars logo" />
+				<span>OnlyCars</span>
+			</a>
+			<p class="footer-copy">© 2026 OnlyCars. All rights reserved.</p>
+			<div class="footer-links">
+				<a href="privacy-policy.html">Privacy Policy</a>
+				<a href="mailto:onlycarssupport@gmail.com">Contact</a>
+			</div>
+		</div>
+	</footer>
+</div>
+
+<script>
+	const nav = document.getElementById("nav");
+	const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+	function updateNav() {
+		if (!nav) return;
+		nav.classList.toggle("scrolled", window.scrollY > 50);
+	}
+
+	function runHeroIntro() {
+		const items = document.querySelectorAll(".intro-el");
+		if (prefersReducedMotion) { items.forEach(el => el.classList.add("in")); return; }
+		items.forEach((el, i) => setTimeout(() => el.classList.add("in"), 80 + i * 130));
+	}
+
+	function initScrollReveal() {
+		const elements = document.querySelectorAll(".reveal");
+		if (!elements.length) return;
+		if (prefersReducedMotion) { elements.forEach(el => el.classList.add("in")); return; }
+
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (!entry.isIntersecting) return;
+				const el = entry.target;
+				const parent = el.parentElement;
+				const siblings = Array.from(parent?.children ?? []).filter(c => c.classList.contains("reveal"));
+				const idx = siblings.indexOf(el);
+				setTimeout(() => el.classList.add("in"), idx * 80);
+				observer.unobserve(el);
+			});
+		}, { threshold: 0.1, rootMargin: "0px 0px -5% 0px" });
+
+		elements.forEach(el => observer.observe(el));
+	}
+
+	updateNav();
+	runHeroIntro();
+	initScrollReveal();
+	window.addEventListener("scroll", updateNav, { passive: true });
+</script>
 </body>
 </html>
